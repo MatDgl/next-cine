@@ -1,7 +1,5 @@
 import { Movie } from '@/types/models';
 
-// const BASE_URL = 'http://localhost:8000'; // À externaliser plus tard
-
 // Données de test temporaires
 const mockMovies: Movie[] = [
 //   {
@@ -56,15 +54,6 @@ export class MovieService {
         resolve(mockMovies);
       }, 500);
     });
-    
-    // Code API réel (commenté pour le moment)
-    /*
-    const response = await fetch(`${BASE_URL}/movie`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch movies');
-    }
-    return response.json();
-    */
   }
 
   static async getMovieById(id: number): Promise<Movie> {
@@ -73,15 +62,6 @@ export class MovieService {
       throw new Error('Movie not found');
     }
     return movie;
-    
-    // Code API réel (commenté pour le moment)
-    /*
-    const response = await fetch(`${BASE_URL}/movie/${id}`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch movie');
-    }
-    return response.json();
-    */
   }
 
   static async updateRating(id: number, rating: number): Promise<Movie> {
@@ -93,20 +73,5 @@ export class MovieService {
     
     mockMovies[movieIndex] = { ...mockMovies[movieIndex], rating };
     return mockMovies[movieIndex];
-    
-    // Code API réel (commenté pour le moment)
-    /*
-    const response = await fetch(`${BASE_URL}/movie/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ rating }),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to update rating');
-    }
-    return response.json();
-    */
   }
 }

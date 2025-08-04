@@ -14,7 +14,7 @@ interface StarRatingProps {
   onRatingUpdate?: (newRating: number) => void;
 }
 
-export default function StarRating({ data, onRatingUpdate }: StarRatingProps) {
+export default function StarRating({ data, onRatingUpdate }: Readonly<StarRatingProps>) {
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   

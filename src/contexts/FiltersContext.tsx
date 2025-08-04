@@ -39,13 +39,13 @@ interface FiltersProviderProps {
   children: ReactNode;
 }
 
-export function FiltersProvider({ children }: FiltersProviderProps) {
+export function FiltersProvider({ children }: Readonly<FiltersProviderProps>) {
   const [sortValue, setSortValue] = useState<SortOption>(SortOption.LASTMODIFIED);
   const [rateValue, setRateValue] = useState<number>(0);
   const [serieTypeValue, setSerieTypeValue] = useState<number>(0);
   const [visibleCount, setVisibleCount] = useState<number>(20);
 
-  const sortMovies = (movies: Movie[], sort: SortOption): Movie[] => {
+  const sortMovies = React.useCallback((movies: Movie[], sort: SortOption): Movie[] => {
     const sorted = [...movies];
     
     switch (sort) {
@@ -69,9 +69,9 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
       default:
         return sorted;
     }
-  };
+  }, []);
 
-  const filterMovies = (movies: Movie[]): Movie[] => {
+  const filterMovies = React.useCallback((movies: Movie[]): Movie[] => {
     let filtered = [...movies];
     
     // Filter by rating
@@ -81,9 +81,9 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
     
     // Sort movies
     return sortMovies(filtered, sortValue);
-  };
+  }, [rateValue, sortMovies, sortValue]);
 
-  const filterSeries = (series: Serie[]): Serie[] => {
+  const filterSeries = React.useCallback((series: Serie[]): Serie[] => {
     let filtered = [...series];
     
     // Filter by serie type
@@ -101,9 +101,9 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
     // Sort series (cast to Movie[] for sorting)
     const sortedMovies = sortMovies(filtered as Movie[], sortValue);
     return sortedMovies as Serie[];
-  };
+  }, [serieTypeValue, rateValue, sortMovies, sortValue]);
 
-  const value: FiltersContextType = {
+  const value = React.useMemo<FiltersContextType>(() => ({
     sortValue,
     setSortValue,
     rateValue,
@@ -115,7 +115,15 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
     sortMovies,
     filterMovies,
     filterSeries,
-  };
+  }), [
+    sortValue,
+    rateValue,
+    serieTypeValue,
+    visibleCount,
+    sortMovies,
+    filterMovies,
+    filterSeries,
+  ]);
 
   return (
     <FiltersContext.Provider value={value}>

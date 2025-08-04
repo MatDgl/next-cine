@@ -8,7 +8,7 @@ interface MuiProviderProps {
   children: ReactNode;
 }
 
-export default function MuiProvider({ children }: MuiProviderProps) {
+export default function MuiProvider({ children }: Readonly<MuiProviderProps>) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

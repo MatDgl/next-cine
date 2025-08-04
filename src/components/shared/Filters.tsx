@@ -15,7 +15,7 @@ interface FiltersProps {
   context: Context;
 }
 
-export default function Filters({ context }: FiltersProps) {
+export default function Filters({ context }: Readonly<FiltersProps>) {
   const {
     sortValue,
     setSortValue,
@@ -52,11 +52,11 @@ export default function Filters({ context }: FiltersProps) {
   };
 
   const handleRateChange = (event: SelectChangeEvent<number>) => {
-    setRateValue(event.target.value as number);
+    setRateValue(Number(event.target.value));
   };
 
   const handleSerieTypeChange = (event: SelectChangeEvent<number>) => {
-    setSerieTypeValue(event.target.value as number);
+    setSerieTypeValue(Number(event.target.value));
   };
 
   return (

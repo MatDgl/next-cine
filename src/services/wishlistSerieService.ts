@@ -2,48 +2,6 @@ import { Serie } from '@/types/models';
 
 // Données de test pour les séries à voir
 const mockWishlistSeries: Serie[] = [
-  {
-    id: 201,
-    title: 'House of the Dragon',
-    src: 'image_10',
-    followed: false,
-    lastModified: '2024-02-18'
-  },
-  {
-    id: 202,
-    title: 'The Last of Us',
-    src: 'image_11',
-    followed: false,
-    lastModified: '2024-02-16'
-  },
-  {
-    id: 203,
-    title: 'Wednesday',
-    src: 'image_13',
-    followed: false,
-    lastModified: '2024-02-14'
-  },
-  {
-    id: 204,
-    title: 'Stranger Things 5',
-    src: 'image_14',
-    followed: false,
-    lastModified: '2024-02-12'
-  },
-  {
-    id: 205,
-    title: 'The Bear',
-    src: 'image_15',
-    followed: false,
-    lastModified: '2024-02-09'
-  },
-  {
-    id: 206,
-    title: 'Abbott Elementary',
-    src: 'image_16',
-    followed: false,
-    lastModified: '2024-02-06'
-  }
 ];
 
 export class WishlistSerieService {
@@ -79,17 +37,5 @@ export class WishlistSerieService {
     if (index !== -1) {
       mockWishlistSeries.splice(index, 1);
     }
-  }
-
-  static async toggleFollow(id: number): Promise<Serie> {
-    const serieIndex = mockWishlistSeries.findIndex(s => s.id === id);
-    if (serieIndex === -1) {
-      throw new Error('Serie not found in wishlist');
-    }
-    
-    mockWishlistSeries[serieIndex].followed = !mockWishlistSeries[serieIndex].followed;
-    mockWishlistSeries[serieIndex].lastModified = new Date().toISOString().split('T')[0];
-    
-    return mockWishlistSeries[serieIndex];
   }
 }

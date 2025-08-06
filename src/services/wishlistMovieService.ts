@@ -5,37 +5,37 @@ const mockWishlistMovies: Movie[] = [
   {
     id: 101,
     title: 'Dune: Part Two',
-    src: 'image_3',
+    src: '',
     lastModified: '2024-02-15'
   },
   {
     id: 102,
     title: 'Oppenheimer',
-    src: 'image_4',
+    src: '',
     lastModified: '2024-02-10'
   },
   {
     id: 103,
     title: 'Killers of the Flower Moon',
-    src: 'image_5',
+    src: '',
     lastModified: '2024-02-08'
   },
   {
     id: 104,
     title: 'The Batman',
-    src: 'image_6',
+    src: '',
     lastModified: '2024-02-05'
   },
   {
     id: 105,
     title: 'Top Gun: Maverick',
-    src: 'image_7',
+    src: '',
     lastModified: '2024-02-03'
   },
   {
     id: 106,
     title: 'Avatar: The Way of Water',
-    src: 'image_9',
+    src: '',
     lastModified: '2024-02-01'
   }
 ];

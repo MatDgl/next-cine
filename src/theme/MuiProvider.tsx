@@ -5,10 +5,10 @@ import { theme } from './theme';
 import { ReactNode } from 'react';
 
 interface MuiProviderProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
-export default function MuiProvider({ children }: Readonly<MuiProviderProps>) {
+export default function MuiProvider({ children }: MuiProviderProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

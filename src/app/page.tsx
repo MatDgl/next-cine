@@ -4,6 +4,7 @@ import ProfileHeader from '@/components/shared/ProfileHeader';
 import { useState } from 'react';
 import MoviesPage from '@/components/pages/MoviesPage';
 import SeriesPage from '@/components/pages/SeriesPage';
+import { theme } from '@/theme/theme';
 
 export default function Home() {
   const [value, setValue] = useState(0);
@@ -17,7 +18,7 @@ export default function Home() {
       
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
         <Box sx={{ 
-          backgroundColor: 'rgba(255,255,255,0.05)', 
+          backgroundColor: theme.palette.background.paper,
           borderRadius: 3, 
           padding: 0.5,
           display: 'flex',

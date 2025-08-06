@@ -1,3 +1,4 @@
+import { theme } from '@/theme/theme';
 import Image from 'next/image';
 import React from 'react';
 
@@ -67,7 +68,7 @@ export default function ProfileHeader() {
             href={btn.href}
             style={{
               padding: '6px 16px',
-              background: 'rgba(0,0,0,0.8)',
+              background: theme.palette.background.default,
               color: 'white',
               borderRadius: 16,
               textDecoration: 'none',

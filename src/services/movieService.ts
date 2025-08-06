@@ -2,48 +2,48 @@ import { Movie } from '@/types/models';
 
 // Données de test temporaires
 const mockMovies: Movie[] = [
-//   {
-//     id: 1,
-//     title: 'The Dark Knight',
-//     src: 'dark_knight',
-//     rating: 5,
-//     lastModified: '2024-01-10'
-//   },
-//   {
-//     id: 2,
-//     title: 'Pulp Fiction',
-//     src: 'pulp_fiction',
-//     rating: 4.5,
-//     lastModified: '2024-01-10'
-//   },
-//   {
-//     id: 3,
-//     title: 'Inception',
-//     src: 'inception',
-//     rating: 4,
-//     lastModified: '2024-01-10'
-//   },
-//   {
-//     id: 4,
-//     title: 'Interstellar',
-//     src: 'interstellar',
-//     rating: 4.5,
-//     lastModified: '2024-01-10'
-//   },
-//   {
-//     id: 5,
-//     title: 'Seven',
-//     src: 'seven',
-//     rating: 4,
-//     lastModified: '2024-01-10'
-//   },
-//   {
-//     id: 6,
-//     title: 'Django Unchained',
-//     src: 'django',
-//     rating: 4,
-//     lastModified: '2024-01-10'
-//   }
+  {
+    id: 1,
+    title: 'The Dark Knight',
+    src: 'dark_knight',
+    rating: 5,
+    lastModified: '2024-01-10'
+  },
+  {
+    id: 2,
+    title: 'Pulp Fiction',
+    src: '',
+    rating: 4.5,
+    lastModified: '2024-01-10'
+  },
+  {
+    id: 3,
+    title: 'Inception',
+    src: '',
+    rating: 4,
+    lastModified: '2024-01-10'
+  },
+  // {
+  //   id: 4,
+  //   title: 'Interstellar',
+  //   src: 'interstellar',
+  //   rating: 4.5,
+  //   lastModified: '2024-01-10'
+  // },
+  // {
+  //   id: 5,
+  //   title: 'Seven',
+  //   src: 'seven',
+  //   rating: 4,
+  //   lastModified: '2024-01-10'
+  // },
+  // {
+  //   id: 6,
+  //   title: 'Django Unchained',
+  //   src: 'django',
+  //   rating: 4,
+  //   lastModified: '2024-01-10'
+  // }
 ];
 
 export class MovieService {

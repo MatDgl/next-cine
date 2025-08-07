@@ -8,6 +8,7 @@ import {
 import { Box, Tooltip } from '@mui/material';
 import { Movie } from '@/types/models';
 import { MovieService } from '@/services/movieService';
+import { theme } from '@/theme/theme';
 
 interface StarRatingProps {
   data: Movie;
@@ -26,11 +27,11 @@ export default function StarRating({ data, onRatingUpdate }: Readonly<StarRating
     const rating = getDisplayRating();
     
     if (rating >= index + 1) {
-      return <Star sx={{ color: '#ffc107' }} />;
+      return <Star sx={{ color: theme.palette.secondary.main }} />;
     } else if (rating >= index + 0.5) {
-      return <StarHalf sx={{ color: '#ffc107' }} />;
+      return <StarHalf sx={{ color: theme.palette.secondary.main }} />;
     } else {
-      return <StarBorder sx={{ color: '#ffc107' }} />;
+      return <StarBorder sx={{ color: theme.palette.secondary.main }} />;
     }
   };
 
@@ -112,6 +113,7 @@ export default function StarRating({ data, onRatingUpdate }: Readonly<StarRating
           key={index}
           title={getTooltipText()}
           placement="top"
+          slotProps={{ tooltip: { sx: { fontSize: '1rem' } } }}
         >
           <Box
             component="span"

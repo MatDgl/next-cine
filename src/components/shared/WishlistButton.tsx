@@ -1,59 +1,65 @@
-'use client';
-import React, { useState } from 'react';
-import { 
-  Bookmark, 
-  BookmarkBorder 
-} from '@mui/icons-material';
-import { Box, Tooltip, IconButton } from '@mui/material';
-import { Movie, Serie } from '@/types/models';
+"use client";
+import React, { useState } from "react";
+import { Bookmark, BookmarkBorder } from "@mui/icons-material";
+import { Box, IconButton, Tooltip } from "@mui/material";
+import { Movie, Serie } from "@/types/models";
+import { theme } from "@/theme/theme";
 
 interface WishlistButtonProps {
   data: Movie | Serie;
-  isInWishlist: boolean;
   onToggleWishlist: (id: number, isInWishlist: boolean) => void;
 }
 
-export default function WishlistButton({ data, isInWishlist, onToggleWishlist }: Readonly<WishlistButtonProps>) {
+export default function WishlistButton({
+  data,
+  onToggleWishlist,
+}: Readonly<WishlistButtonProps>) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleToggle = async () => {
     setIsLoading(true);
     try {
-      onToggleWishlist(data.id, isInWishlist);
+      onToggleWishlist(data.id, data.wishlist);
     } catch (error) {
-      console.error('Error toggling wishlist:', error);
+      console.error("Error toggling wishlist:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%'
-      }}
+    <Tooltip
+      title={data.wishlist ? "Retirer des envies" : "Ajouter aux envies"}
     >
-      <Tooltip title={isInWishlist ? "Retirer des envies" : "Ajouter aux envies"}>
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 8,
+          left: "50%",
+          transform: "translateX(-50%)",
+          backgroundColor: theme.palette.background.paper,
+          borderRadius: 2,
+          padding: "6px 12px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          cursor: "pointer",
+        }}
+        onClick={handleToggle}
+      >
         <IconButton
-          onClick={handleToggle}
           disabled={isLoading}
           size="small"
           sx={{
-            color: '#ffc107',
-            '&:hover': {
-              backgroundColor: 'rgba(255, 193, 7, 0.1)',
+            color: theme.palette.secondary.main,
+            "&:disabled": {
+              opacity: 0.5,
             },
-            '&:disabled': {
-              opacity: 0.5
-            }
           }}
         >
-          {isInWishlist ? <Bookmark /> : <BookmarkBorder />}
+          {data.wishlist ? <Bookmark /> : <BookmarkBorder />}
         </IconButton>
-      </Tooltip>
-    </Box>
+      </Box>
+    </Tooltip>
   );
 }

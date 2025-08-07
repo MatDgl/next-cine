@@ -8,21 +8,16 @@ import {
   Box,
   SelectChangeEvent
 } from '@mui/material';
-import { Context, SortOption } from '@/types/models';
+import { SortOption } from '@/types/models';
 import { useFilters } from '@/contexts/FiltersContext';
 
-interface FiltersProps {
-  context: Context;
-}
-
-export default function Filters({ context }: Readonly<FiltersProps>) {
+export default function Filters() {
+  
   const {
     sortValue,
     setSortValue,
     rateValue,
     setRateValue,
-    serieTypeValue,
-    setSerieTypeValue,
   } = useFilters();
 
   const sortBy = [
@@ -41,12 +36,6 @@ export default function Filters({ context }: Readonly<FiltersProps>) {
     { label: '5 étoiles', value: 5, id: 4 },
   ];
 
-  const serieTypes = [
-    { label: 'Toutes les séries', value: 0, id: -1 },
-    { label: 'Séries que je suis', value: 1, id: 0 },
-    { label: 'Séries notées', value: 2, id: 1 },
-  ];
-
   const handleSortChange = (event: SelectChangeEvent<SortOption>) => {
     setSortValue(event.target.value as SortOption);
   };
@@ -55,12 +44,8 @@ export default function Filters({ context }: Readonly<FiltersProps>) {
     setRateValue(Number(event.target.value));
   };
 
-  const handleSerieTypeChange = (event: SelectChangeEvent<number>) => {
-    setSerieTypeValue(Number(event.target.value));
-  };
-
   return (
-    <Box 
+    <Box
       sx={{ 
         display: 'flex', 
         gap: 2, 
@@ -84,24 +69,6 @@ export default function Filters({ context }: Readonly<FiltersProps>) {
           ))}
         </Select>
       </FormControl>
-
-      {/* Serie type filter - only for series */}
-      {context === Context.SERIE && (
-        <FormControl size="small" sx={{ minWidth: 180 }}>
-          <InputLabel>Filtrer par statut</InputLabel>
-          <Select
-            value={serieTypeValue}
-            label="Filtrer par statut"
-            onChange={handleSerieTypeChange}
-          >
-            {serieTypes.map((serieType) => (
-              <MenuItem key={serieType.id} value={serieType.value}>
-                {serieType.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      )}
 
       {/* Rating filter */}
       <FormControl size="small" sx={{ minWidth: 160 }}>

@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback, useMemo } from 'react';
 import { Movie, Serie, SortOption } from '@/types/models';
 
 interface FiltersContextType {
@@ -10,10 +10,6 @@ interface FiltersContextType {
   // Rate filter
   rateValue: number;
   setRateValue: (value: number) => void;
-  
-  // Serie type filter
-  serieTypeValue: number;
-  setSerieTypeValue: (value: number) => void;
   
   // Visible count
   visibleCount: number;
@@ -36,16 +32,15 @@ export function useFilters() {
 }
 
 interface FiltersProviderProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
-export function FiltersProvider({ children }: Readonly<FiltersProviderProps>) {
+export function FiltersProvider({ children }: FiltersProviderProps) {
   const [sortValue, setSortValue] = useState<SortOption>(SortOption.LASTMODIFIED);
   const [rateValue, setRateValue] = useState<number>(0);
-  const [serieTypeValue, setSerieTypeValue] = useState<number>(0);
   const [visibleCount, setVisibleCount] = useState<number>(20);
 
-  const sortMovies = React.useCallback((movies: Movie[], sort: SortOption): Movie[] => {
+  const sortMovies = useCallback((movies: Movie[], sort: SortOption): Movie[] => {
     const sorted = [...movies];
     
     switch (sort) {
@@ -71,7 +66,8 @@ export function FiltersProvider({ children }: Readonly<FiltersProviderProps>) {
     }
   }, []);
 
-  const filterMovies = React.useCallback((movies: Movie[]): Movie[] => {
+// useCallback : Enregistre une fonction avec ses dépendances pour éviter de la recréer à chaque rendu
+  const filterMovies = useCallback((movies: Movie[]): Movie[] => {
     let filtered = [...movies];
     
     // Filter by rating
@@ -83,15 +79,8 @@ export function FiltersProvider({ children }: Readonly<FiltersProviderProps>) {
     return sortMovies(filtered, sortValue);
   }, [rateValue, sortMovies, sortValue]);
 
-  const filterSeries = React.useCallback((series: Serie[]): Serie[] => {
+  const filterSeries = useCallback((series: Serie[]): Serie[] => {
     let filtered = [...series];
-    
-    // Filter by serie type
-    if (serieTypeValue === 1) {
-      filtered = filtered.filter((serie) => serie.followed);
-    } else if (serieTypeValue === 2) {
-      filtered = filtered.filter((serie) => serie.rating && serie.rating > 0);
-    }
     
     // Filter by rating
     if (rateValue > 0) {
@@ -101,15 +90,14 @@ export function FiltersProvider({ children }: Readonly<FiltersProviderProps>) {
     // Sort series (cast to Movie[] for sorting)
     const sortedMovies = sortMovies(filtered as Movie[], sortValue);
     return sortedMovies as Serie[];
-  }, [serieTypeValue, rateValue, sortMovies, sortValue]);
+  }, [rateValue, sortMovies, sortValue]);
 
-  const value = React.useMemo<FiltersContextType>(() => ({
+  // useMemo : Mémorise la valeur du contexte pour éviter de la recalculer à chaque rendu
+  const value = useMemo<FiltersContextType>(() => ({
     sortValue,
     setSortValue,
     rateValue,
     setRateValue,
-    serieTypeValue,
-    setSerieTypeValue,
     visibleCount,
     setVisibleCount,
     sortMovies,
@@ -118,7 +106,6 @@ export function FiltersProvider({ children }: Readonly<FiltersProviderProps>) {
   }), [
     sortValue,
     rateValue,
-    serieTypeValue,
     visibleCount,
     sortMovies,
     filterMovies,

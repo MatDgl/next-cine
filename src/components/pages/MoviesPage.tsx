@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, CircularProgress } from '@mui/material';
-import { Movie, Context } from '@/types/models';
+import { Movie } from '@/types/models';
 import { MovieService } from '@/services/movieService';
 import { useFilters } from '@/contexts/FiltersContext';
 import Card from '@/components/shared/Card';
@@ -50,9 +50,6 @@ export default function MoviesPage() {
     return (
         <Box sx={{ textAlign: 'center', py: 4 }}>
           <CircularProgress />
-          <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-            Chargement des films...
-          </Typography>
         </Box>
     );
   }
@@ -72,7 +69,7 @@ export default function MoviesPage() {
 
   return (
       <Box>
-        <Filters context={Context.MOVIE} />
+        <Filters />
         {visibleMovies.length > 0 ? (
           <>
             <Box 

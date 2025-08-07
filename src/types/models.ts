@@ -4,6 +4,7 @@ export interface Movie {
   src: string;
   rating?: number;
   lastModified?: string;
+  wishlist: boolean;
 }
 
 export interface Serie extends Movie {
@@ -21,9 +22,4 @@ export enum SortOption {
   TITLE = 'titleAsc',
   RATING_DESC = 'ratingDesc',
   RATING_ASC = 'ratingAsc',
-}
-
-export enum Context {
-  MOVIE = 'movie',
-  SERIE = 'serie',
 }

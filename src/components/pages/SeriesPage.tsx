@@ -1,13 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Box, Button, Typography, CircularProgress } from "@mui/material";
-import { Serie, Context } from "@/types/models";
+import { Serie } from "@/types/models";
 import { useFilters } from "@/contexts/FiltersContext";
 import Card from "@/components/shared/Card";
 import Filters from "@/components/shared/Filters";
 import { SerieService } from "@/services/serieService";
 
-// Service temporaire pour les séries - en attendant la vraie API
 export default function SeriesPage() {
   const [allSeries, setAllSeries] = useState<Serie[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +67,7 @@ export default function SeriesPage() {
 
   return (
     <Box>
-      <Filters context={Context.SERIE} />
+      <Filters />
       {visibleSeries.length > 0 ? (
         <>
           <Box

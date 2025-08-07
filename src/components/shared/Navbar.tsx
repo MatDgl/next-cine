@@ -25,41 +25,8 @@ export default function Navbar() {
               NextCine
             </Typography>
           </Link>
-
           <Box sx={{ flexGrow: 1 }} />
-
-          {/* Champ de recherche commenté pour correspondre à l'original */}
-          {/* 
-          <TextField
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Rechercher un film..."
-            variant="filled"
-            size="small"
-            sx={{ 
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              borderRadius: 1,
-              '& .MuiFilledInput-root': {
-                backgroundColor: 'transparent',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                },
-                '&.Mui-focused': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                }
-              }
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <Search sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-          */}
-
+          {/* TODO: Ajouter un champ de recherche */}
           <Box sx={{ flexGrow: 1 }} />
         </Box>
       </Toolbar>

@@ -1,6 +1,7 @@
 import { theme } from '@/theme/theme';
 import Image from 'next/image';
 import React from 'react';
+import { Box } from '@mui/material';
 
 const profile = {
   name: 'Mathieu',
@@ -63,22 +64,35 @@ export default function ProfileHeader() {
         }}
       >
         {buttons.map((btn) => (
-          <a
+          <Box
             key={btn.label}
+            component="a"
             href={btn.href}
-            style={{
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               padding: '6px 16px',
               background: theme.palette.background.default,
+              backgroundColor: theme.palette.background.default,
               color: 'white',
-              borderRadius: 16,
+              borderRadius: 2,
               textDecoration: 'none',
               fontWeight: 500,
               fontSize: '0.85rem',
               boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+              transition: 'transform 0.18s cubic-bezier(.4,2,.6,1), background 0.18s',
+              cursor: 'pointer',
+              willChange: 'transform',
+              verticalAlign: 'middle',
+              '&:hover': {
+                transform: 'scale(1.08)',
+                background: theme.palette.background.paper,
+              },
             }}
           >
             {btn.label}
-          </a>
+          </Box>
         ))}
       </div>
     </div>

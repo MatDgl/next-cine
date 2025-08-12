@@ -84,9 +84,9 @@ export default function SeriesPage() {
               mb: 3,
             }}
           >
-            {visibleSeries.map((serie) => (
+      {visibleSeries.map((serie) => (
               <Box key={serie.id}>
-                <Card data={serie} onRatingUpdate={handleRatingUpdate} />
+        <Card data={serie} onRatingUpdate={handleRatingUpdate} kind="serie" />
               </Box>
             ))}
           </Box>

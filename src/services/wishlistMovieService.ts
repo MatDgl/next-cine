@@ -1,39 +1,26 @@
 import { Movie } from '@/types/models';
-import { mockMovies } from './movieService';
+import { MovieService } from './movieService';
+import api from './api';
 
 export class WishlistMovieService {
 
   static async getWishlistMovies(): Promise<Movie[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockMovies.filter((m) => m.wishlist));
-      }, 500);
-    });
+    const { data } = await api.get<Movie[]>('/movie/wishlist');
+    return data;
   }
 
   static async getWishlistMovieById(id: number): Promise<Movie> {
-    const movie = mockMovies.find(m => m.id === id);
-    if (!movie) {
-      throw new Error('Movie not found in wishlist');
-    }
-    return movie;
+    const { data } = await api.get<Movie>(`/movie/${id}`);
+    if (!data.wishlist) throw new Error('Movie not in wishlist');
+    return data;
   }
 
   static async addToWishlist(movie: Movie): Promise<Movie> {
-    const newMovie = {
-      ...movie,
-      id: Date.now(),
-      lastModified: new Date().toISOString().split('T')[0]
-    };
-    mockMovies.unshift(newMovie);
-    return newMovie;
+    return MovieService.updateWishlist(movie.id, true);
   }
 
   static async removeFromWishlist(id: number): Promise<void> {
-    const index = mockMovies.findIndex(m => m.id === id);
-    if (index !== -1) {
-      mockMovies.splice(index, 1);
-    }
+    await MovieService.updateWishlist(id, false);
   }
 
   static async toggleWishlist(
@@ -44,12 +31,11 @@ export class WishlistMovieService {
   ): Promise<void> {
     try {
       if (isCurrentlyInWishlist) {
-        // Retirer de la wishlist
-        await WishlistMovieService.removeFromWishlist(id);
-        setAllMovies(allMovies.filter(movie => movie.id !== id));
+  await WishlistMovieService.removeFromWishlist(id);
+  setAllMovies(allMovies.filter(movie => movie.id !== id));
       } else {
-        // Ajouter à la wishlist (cette logique sera implémentée plus tard)
-        console.log('Ajouter à la wishlist:', id);
+  const updated = await MovieService.updateWishlist(id, true);
+  setAllMovies([updated, ...allMovies]);
       }
     } catch (err) {
       console.error('Error toggling wishlist:', err);

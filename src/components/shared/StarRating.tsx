@@ -8,14 +8,16 @@ import {
 import { Box, Tooltip } from '@mui/material';
 import { Movie } from '@/types/models';
 import { MovieService } from '@/services/movieService';
+import { SerieService } from '@/services/serieService';
 import { theme } from '@/theme/theme';
 
 interface StarRatingProps {
   data: Movie;
   onRatingUpdate?: (newRating: number) => void;
+  kind?: 'movie' | 'serie';
 }
 
-export default function StarRating({ data, onRatingUpdate }: Readonly<StarRatingProps>) {
+export default function StarRating({ data, onRatingUpdate, kind = 'movie' }: Readonly<StarRatingProps>) {
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   
@@ -57,7 +59,11 @@ export default function StarRating({ data, onRatingUpdate }: Readonly<StarRating
     setIsSaving(true);
 
     try {
-      await MovieService.updateRating(data.id, hoveredRating);
+      if (kind === 'serie') {
+        await SerieService.updateRating(data.id, hoveredRating);
+      } else {
+        await MovieService.updateRating(data.id, hoveredRating);
+      }
       onRatingUpdate?.(hoveredRating);
     } catch (error) {
       data.rating = oldRating;

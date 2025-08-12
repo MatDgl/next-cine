@@ -86,9 +86,9 @@ export default function MoviesPage() {
                 mb: 3
               }}
             >
-              {visibleMovies.map((movie) => (
+        {visibleMovies.map((movie) => (
                 <Box key={movie.id}>
-                  <Card data={movie} onRatingUpdate={handleRatingUpdate} />
+          <Card data={movie} onRatingUpdate={handleRatingUpdate} kind="movie" />
                 </Box>
               ))}
             </Box>

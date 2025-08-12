@@ -1,59 +1,40 @@
 import { Serie } from '@/types/models';
-
-// Données de test pour les séries à voir
-const mockWishlistSeries: Serie[] = [
-];
+import { SerieService } from './serieService';
+import api from './api';
 
 export class WishlistSerieService {
-
   static async getWishlistSeries(): Promise<Serie[]> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockWishlistSeries);
-      }, 500);
-    });
+    const { data } = await api.get<Serie[]>('/serie/wishlist');
+    return data;
   }
 
   static async getWishlistSerieById(id: number): Promise<Serie> {
-    const serie = mockWishlistSeries.find(s => s.id === id);
-    if (!serie) {
-      throw new Error('Serie not found in wishlist');
-    }
-    return serie;
+    const { data } = await api.get<Serie>(`/serie/${id}`);
+    if (!data.wishlist) throw new Error('Serie not in wishlist');
+    return data;
   }
 
   static async addToWishlist(serie: Serie): Promise<Serie> {
-    const newSerie = {
-      ...serie,
-      id: Date.now(),
-      followed: false,
-      lastModified: new Date().toISOString().split('T')[0]
-    };
-    mockWishlistSeries.unshift(newSerie);
-    return newSerie;
+    return SerieService.updateWishlist(serie.id, true);
   }
 
   static async removeFromWishlist(id: number): Promise<void> {
-    const index = mockWishlistSeries.findIndex(s => s.id === id);
-    if (index !== -1) {
-      mockWishlistSeries.splice(index, 1);
-    }
+    await SerieService.updateWishlist(id, false);
   }
 
   static async toggleWishlist(
-    id: number, 
+    id: number,
     isCurrentlyInWishlist: boolean,
     allSeries: Serie[],
-    setAllSeries: (series: Serie[]) => void
+    setAllSeries: (series: Serie[]) => void,
   ): Promise<void> {
     try {
       if (isCurrentlyInWishlist) {
-        // Retirer de la wishlist
         await WishlistSerieService.removeFromWishlist(id);
-        setAllSeries(allSeries.filter(serie => serie.id !== id));
+        setAllSeries(allSeries.filter((serie) => serie.id !== id));
       } else {
-        // Ajouter à la wishlist (cette logique sera implémentée plus tard)
-        console.log('Ajouter à la wishlist:', id);
+        const updated = await SerieService.updateWishlist(id, true);
+        setAllSeries([updated, ...allSeries]);
       }
     } catch (err) {
       console.error('Error toggling wishlist:', err);

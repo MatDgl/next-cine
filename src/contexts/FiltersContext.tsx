@@ -46,10 +46,10 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
     switch (sort) {
       case SortOption.LASTMODIFIED:
         return sorted.sort((a, b) => {
-          if (!a.lastModified && !b.lastModified) return 0;
-          if (!a.lastModified) return 1;
-          if (!b.lastModified) return -1;
-          return new Date(String(b.lastModified)).getTime() - new Date(String(a.lastModified)).getTime();
+          if (!a.updatedAt && !b.updatedAt) return 0;
+          if (!a.updatedAt) return 1;
+          if (!b.updatedAt) return -1;
+          return new Date(String(b.updatedAt)).getTime() - new Date(String(a.updatedAt)).getTime();
         });
       
       case SortOption.TITLE:

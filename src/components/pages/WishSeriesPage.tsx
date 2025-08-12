@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, CircularProgress, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Serie } from '@/types/models';
-import { WishlistSerieService } from '@/services/wishlistSerieService';
+import { SerieService } from '@/services/serieService';
 import { useFilters } from '@/contexts/FiltersContext';
 import Card from '@/components/shared/Card';
 
@@ -17,13 +17,13 @@ export default function WishlistSeriesPage() {
   }, []);
 
   const handleToggleWishlist = async (id: number, isCurrentlyInWishlist: boolean) => {
-    await WishlistSerieService.toggleWishlist(id, isCurrentlyInWishlist, allSeries, setAllSeries);
+    await SerieService.toggleWishlist(id, isCurrentlyInWishlist, allSeries, setAllSeries);
   };
 
   const loadWishlistSeries = async () => {
     try {
       setLoading(true);
-      const series = await WishlistSerieService.getWishlistSeries();
+      const series = await SerieService.getWishlistSeries();
       setAllSeries(series);
     } catch (err) {
       setError('Erreur lors du chargement des séries à voir');
@@ -94,6 +94,7 @@ export default function WishlistSeriesPage() {
                 onRatingUpdate={() => {}}
                 isWishlistMode={true}
                 onToggleWishlist={handleToggleWishlist}
+                kind="serie"
               />
             ))}
           </Box>

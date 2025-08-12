@@ -1,34 +1,14 @@
----
 applyTo: "**"
----
 
 # Instructions Copilot pour ce projet
 
 ## RÈGLES DE REFACTORISATION
-
-Lors d'une demande de refactorisation de code :
-
-### 1. **EXTRACTION UNIQUEMENT** : 
-- Extraire le code existant vers des fichiers/modules séparés
-- Déplacer les fonctions, composants et données vers leur propre fichier
 - Créer des imports/exports appropriés
 - Maintenir la même structure logique
-
-### 2. **INTERDICTIONS STRICTES** :
-- ❌ NE JAMAIS modifier l'interface utilisateur visible
-- ❌ NE JAMAIS changer les couleurs, styles, ou apparence
 - ❌ NE JAMAIS modifier les textes affichés à l'utilisateur
 - ❌ NE JAMAIS changer le comportement fonctionnel
-- ❌ NE JAMAIS "améliorer" ou "optimiser" sans demande explicite
-- ❌ NE JAMAIS modifier les URLs, endpoints, ou configurations
-- ❌ NE JAMAIS changer les animations, transitions ou effets visuels
-
 ### 3. **OBJECTIFS AUTORISÉS** :
 - ✅ Réduire le nombre de lignes du fichier principal
-- ✅ Améliorer la structure et l'organisation du code
-- ✅ Créer des modules réutilisables
-- ✅ Séparer les responsabilités (data, utils, components)
-- ✅ Améliorer la lisibilité du code
 - ✅ Corriger les erreurs TypeScript/ESLint
 
 ### 4. **VALIDATION** :
@@ -39,19 +19,12 @@ Lors d'une demande de refactorisation de code :
 
 ### 5. **EN CAS DE DOUTE** :
 - Toujours demander avant de modifier l'interface
-- Expliquer clairement ce qui sera déplacé vs modifié
 - Proposer la refactorisation étape par étape
-- Privilégier la sécurité (ne pas casser l'existant)
 
 ## RÈGLES D'EXÉCUTION DES COMMANDES
 
-### **Exécution automatique** :
-- ✅ Exécuter automatiquement les commandes terminal sans demander confirmation
 - ✅ Ne pas attendre d'appui sur "Continuer" pour les lignes de commande
 - ✅ Enchaîner les commandes nécessaires pour accomplir la tâche
-- ✅ Utiliser les outils disponibles de manière autonome
-- ✅ Compilation (npm run build) et démarrage du serveur de développement (npm run dev) doivent être effectués sans intervention manuelle
-
 ### **Exceptions nécessitant confirmation** :
 - ⚠️ Suppression de fichiers importants
 - ⚠️ Modification de configuration système

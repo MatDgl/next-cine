@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, CircularProgress, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Movie } from '@/types/models';
-import { WishlistMovieService } from '@/services/wishlistMovieService';
+import { MovieService } from '@/services/movieService';
 import { useFilters } from '@/contexts/FiltersContext';
 import Card from '@/components/shared/Card';
 
@@ -17,13 +17,13 @@ export default function WishMoviesPage() {
   }, []);
 
   const handleToggleWishlist = async (id: number, isCurrentlyInWishlist: boolean) => {
-    await WishlistMovieService.toggleWishlist(id, isCurrentlyInWishlist, allMovies, setAllMovies);
+    await MovieService.toggleWishlist(id, isCurrentlyInWishlist, allMovies, setAllMovies);
   };
 
   const loadWishlistMovies = async () => {
     try {
       setLoading(true);
-      const movies = await WishlistMovieService.getWishlistMovies();
+      const movies = await MovieService.getWishlistMovies();
       setAllMovies(movies);
     } catch (err) {
       setError('Erreur lors du chargement des films à voir');
@@ -94,6 +94,7 @@ export default function WishMoviesPage() {
                 onRatingUpdate={() => {}}
                 isWishlistMode={true}
                 onToggleWishlist={handleToggleWishlist}
+                kind="movie"
               />
             ))}
           </Box>

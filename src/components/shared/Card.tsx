@@ -18,6 +18,7 @@ interface CardProps {
   onRatingUpdate?: (movieId: number, newRating: number) => void;
   isWishlistMode?: boolean;
   onToggleWishlist?: (id: number, isInWishlist: boolean) => void;
+  kind?: 'movie' | 'serie';
 }
 
 export default function Card({
@@ -25,15 +26,21 @@ export default function Card({
   onRatingUpdate,
   isWishlistMode,
   onToggleWishlist,
+  kind = 'movie',
 }: Readonly<CardProps>) {
+
+  const defaultImageSrc = '/assets/img/movie/default.png';
+
   const handleImageError = (event: React.SyntheticEvent<HTMLImageElement>) => {
     const target = event.target as HTMLImageElement;
-    target.src = "/assets/img/movie/default.png";
+    target.src = defaultImageSrc;
   };
 
   const handleRatingUpdate = (newRating: number) => {
     onRatingUpdate?.(data.id, newRating);
   };
+
+  const imageSrc = data.src ? `/assets/img/movie/${data.src}.jpg` : defaultImageSrc;
 
   return (
     <MuiCard
@@ -51,7 +58,7 @@ export default function Card({
           <CardMedia
             component="img"
             height="280"
-            image={`/assets/img/movie/${data.src}.jpg`}
+            image={imageSrc}
             alt={data.title}
             onError={handleImageError}
             sx={{
@@ -76,7 +83,7 @@ export default function Card({
               alignItems: "center",
             }}
           >
-            <StarRating data={data} onRatingUpdate={handleRatingUpdate} />
+            <StarRating data={data} onRatingUpdate={handleRatingUpdate} kind={kind} />
           </Box>
         )}
 

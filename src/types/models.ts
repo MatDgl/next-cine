@@ -1,14 +1,15 @@
 export interface Movie {
   id: number;
   title: string;
-  src: string;
+  src?: string;
   rating?: number;
-  lastModified?: string;
   wishlist: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Serie extends Movie {
-  followed: boolean;
+  followed?: boolean;
 }
 
 export interface Sort {

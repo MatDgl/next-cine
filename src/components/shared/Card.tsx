@@ -40,12 +40,20 @@ export default function Card({
     onRatingUpdate?.(data.id, newRating);
   };
 
-  const imageSrc = data.src ? `/assets/img/movie/${data.src}.jpg` : defaultImageSrc;
+  // Déterminer l'image à utiliser
+  // Pour l'instant, utiliser l'image par défaut car nous n'avons pas encore l'API poster
+  // TODO: Implémenter la récupération d'images TMDB via poster_path
+  const imageSrc = defaultImageSrc;
+
+  // Déterminer le lien vers la page de détail
+  const detailLink = data.tmdbId 
+    ? `/${kind}/${data.tmdbId}` 
+    : '/'; // Pour les données sans tmdbId, revenir à l'accueil
 
   return (
     <MuiCard
       sx={{
-        maxWidth: 200,
+  maxWidth: 260,
         backgroundColor: theme.palette.background.paper,
         "&:hover": {
           transform: "scale(1.05)",
@@ -54,10 +62,10 @@ export default function Card({
       }}
     >
       <Box sx={{ position: "relative" }}>
-        <Link href="/" passHref>
+        <Link href={detailLink} passHref>
           <CardMedia
             component="img"
-            height="280"
+            height="360"
             image={imageSrc}
             alt={data.title}
             onError={handleImageError}

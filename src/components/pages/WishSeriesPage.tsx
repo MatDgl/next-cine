@@ -24,7 +24,8 @@ export default function WishlistSeriesPage() {
     try {
       setLoading(true);
       const series = await SerieService.getWishlistSeries();
-      setAllSeries(series);
+      // Protection : s'assurer que series est un tableau
+      setAllSeries(Array.isArray(series) ? series : []);
     } catch (err) {
       setError('Erreur lors du chargement des séries à voir');
       console.error('Error loading wishlist series:', err);
@@ -50,7 +51,9 @@ export default function WishlistSeriesPage() {
   }
 
   // On ne filtre pas sur la note, on ne garde que le tri
-  const sortedSeries = sortMovies(allSeries, sortValue) as Serie[];
+  // Protection : s'assurer que allSeries est un tableau avant de trier
+  const safeSeries = Array.isArray(allSeries) ? allSeries : [];
+  const sortedSeries = sortMovies(safeSeries, sortValue) as Serie[];
   const displayedSeries = sortedSeries.slice(0, visibleCount);
   const hasMore = sortedSeries.length > visibleCount;
 
@@ -83,7 +86,7 @@ export default function WishlistSeriesPage() {
         <>
           <Box sx={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', 
             gap: 3,
             mb: 4
           }}>

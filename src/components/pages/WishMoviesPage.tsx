@@ -24,7 +24,8 @@ export default function WishMoviesPage() {
     try {
       setLoading(true);
       const movies = await MovieService.getWishlistMovies();
-      setAllMovies(movies);
+      // Protection : s'assurer que movies est un tableau
+      setAllMovies(Array.isArray(movies) ? movies : []);
     } catch (err) {
       setError('Erreur lors du chargement des films à voir');
       console.error('Error loading wishlist movies:', err);
@@ -50,7 +51,9 @@ export default function WishMoviesPage() {
   }
 
   // On ne filtre pas sur la note, on ne garde que le tri
-  const sortedMovies = sortMovies(allMovies, sortValue);
+  // Protection : s'assurer que allMovies est un tableau avant de trier
+  const safeMovies = Array.isArray(allMovies) ? allMovies : [];
+  const sortedMovies = sortMovies(safeMovies, sortValue);
   const displayedMovies = sortedMovies.slice(0, visibleCount);
   const hasMore = sortedMovies.length > visibleCount;
 
@@ -83,7 +86,7 @@ export default function WishMoviesPage() {
         <>
           <Box sx={{ 
             display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', 
             gap: 3,
             mb: 4
           }}>

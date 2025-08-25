@@ -7,17 +7,24 @@ applyTo: "**"
 - Maintenir la même structure logique
 - ❌ NE JAMAIS modifier les textes affichés à l'utilisateur
 - ❌ NE JAMAIS changer le comportement fonctionnel
-### 3. **OBJECTIFS AUTORISÉS** :
+
+### **RÈGLES DE MODIFICATION DE FICHIERS** :
+- ❌ NE JAMAIS créer de fichiers temporaires (`page_new.tsx`, `page_backup.tsx`, etc.)
+- ✅ Modifier directement les fichiers existants en place
+- ✅ Utiliser uniquement les outils d'édition disponibles (`replace_string_in_file`, `edit_notebook_file`)
+- ✅ Effectuer les modifications par petites étapes si nécessaire
+
+### **OBJECTIFS AUTORISÉS** :
 - ✅ Réduire le nombre de lignes du fichier principal
 - ✅ Corriger les erreurs TypeScript/ESLint
 
-### 4. **VALIDATION** :
+### **VALIDATION** :
 - Le résultat final doit être visuellement et fonctionnellement identique
 - Seule l'organisation du code doit changer
 - Demander confirmation avant tout changement d'apparence
 - Tester que l'application compile sans erreurs
 
-### 5. **EN CAS DE DOUTE** :
+### **EN CAS DE DOUTE** :
 - Toujours demander avant de modifier l'interface
 - Proposer la refactorisation étape par étape
 
@@ -165,13 +172,9 @@ export default Component;
 - ✅ Valider les types des props
 - ✅ Tester les chemins d'assets
 
-## PROMPTS OPTIMAUX
 
-### **Pour les demandes de refactoring** :
-"Refactorise [fichier] en extrayant [éléments] vers des modules séparés. Maintient exactement la même interface utilisateur et le même comportement."
+## 🔧 GESTION DES SERVEURS DE DÉVELOPPEMENT
 
-### **Pour les nouvelles fonctionnalités** :
-"Ajoute [fonctionnalité] en suivant les conventions Material-UI et TypeScript du projet. Utilise les types existants dans models.ts."
-
-### **Pour les corrections** :
-"Corrige [problème] en respectant la structure existante et les types TypeScript définis."
+### **Avant de lancer un nouveau serveur :**
+ ✅ Utiliser le serveur existant si possible
+ ✅ Ne relancer que si nécessaire (changements config, erreurs)

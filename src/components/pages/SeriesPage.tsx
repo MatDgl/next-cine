@@ -38,7 +38,7 @@ export default function SeriesPage() {
     );
   };
 
-  const filteredSeries = filterSeries(allSeries);
+  const filteredSeries = filterSeries(allSeries || []);
   const visibleSeries = filteredSeries.slice(0, visibleCount);
   const canShowMore = filteredSeries.length > visibleSeries.length;
 
@@ -73,14 +73,8 @@ export default function SeriesPage() {
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: {
-                xs: "repeat(2, 1fr)",
-                sm: "repeat(3, 1fr)",
-                md: "repeat(4, 1fr)",
-                lg: "repeat(5, 1fr)",
-                xl: "repeat(6, 1fr)",
-              },
-              gap: 2,
+              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+              gap: 3,
               mb: 3,
             }}
           >

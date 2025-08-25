@@ -38,7 +38,7 @@ export default function MoviesPage() {
     );
   };
 
-  const filteredMovies = filterMovies(allMovies);
+  const filteredMovies = filterMovies(allMovies || []);
   const visibleMovies = filteredMovies.slice(0, visibleCount);
   const canShowMore = filteredMovies.length > visibleMovies.length;
 
@@ -72,18 +72,12 @@ export default function MoviesPage() {
         <Filters />
         {visibleMovies.length > 0 ? (
           <>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 display: 'grid',
-                gridTemplateColumns: {
-                  xs: 'repeat(2, 1fr)',
-                  sm: 'repeat(3, 1fr)',
-                  md: 'repeat(4, 1fr)',
-                  lg: 'repeat(5, 1fr)',
-                  xl: 'repeat(6, 1fr)'
-                },
-                gap: 2,
-                mb: 3
+                gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                gap: 3,
+                mb: 3,
               }}
             >
         {visibleMovies.map((movie) => (

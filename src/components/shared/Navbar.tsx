@@ -7,8 +7,23 @@ import {
   Box
 } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import SearchBar from './SearchBar';
+import { TMDBMovie, TMDBSerie } from '@/types/models';
+import { SearchService } from '@/services/searchService';
 
 export default function Navbar() {
+  const router = useRouter();
+
+  const handleSearchSelect = (result: TMDBMovie | TMDBSerie) => {
+    // Rediriger vers la page de détail en utilisant le tmdbId
+    if (SearchService.isMovie(result)) {
+      router.push(`/movie/${result.tmdbId}`);
+    } else {
+      router.push(`/serie/${result.tmdbId}`);
+    }
+  };
+
   return (
     <AppBar position="static" color="primary">
       <Toolbar>
@@ -25,8 +40,9 @@ export default function Navbar() {
               NextCine
             </Typography>
           </Link>
-          <Box sx={{ flexGrow: 1 }} />
-          {/* TODO: Ajouter un champ de recherche */}
+          
+          <Box sx={{ width: 12 }} />
+          <SearchBar onSelect={handleSearchSelect} />
           <Box sx={{ flexGrow: 1 }} />
         </Box>
       </Toolbar>

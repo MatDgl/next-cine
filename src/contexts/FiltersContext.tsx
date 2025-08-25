@@ -41,6 +41,12 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
   const [visibleCount, setVisibleCount] = useState<number>(20);
 
   const sortMovies = useCallback((movies: Movie[], sort: SortOption): Movie[] => {
+    // Vérification de sécurité : s'assurer que movies est bien un tableau
+    if (!movies || !Array.isArray(movies)) {
+      console.warn('sortMovies called with invalid data:', movies);
+      return [];
+    }
+    
     const sorted = [...movies];
     
     switch (sort) {
@@ -68,6 +74,12 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
 
 // useCallback : Enregistre une fonction avec ses dépendances pour éviter de la recréer à chaque rendu
   const filterMovies = useCallback((movies: Movie[]): Movie[] => {
+    // Vérification de sécurité : s'assurer que movies est bien un tableau
+    if (!movies || !Array.isArray(movies)) {
+      console.warn('filterMovies called with invalid data:', movies);
+      return [];
+    }
+    
     let filtered = [...movies];
     
     // Filter by rating
@@ -80,6 +92,11 @@ export function FiltersProvider({ children }: FiltersProviderProps) {
   }, [rateValue, sortMovies, sortValue]);
 
   const filterSeries = useCallback((series: Serie[]): Serie[] => {
+    // Protection contre les valeurs non-array
+    if (!Array.isArray(series)) {
+      return [];
+    }
+    
     let filtered = [...series];
     
     // Filter by rating

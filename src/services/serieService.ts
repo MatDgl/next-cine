@@ -1,26 +1,32 @@
-import { Serie, CreateSerieDto, CreateSerieFromTMDBDto, TMDBSerie } from "@/types/models";
-import api from "./api";
+import {
+  Serie,
+  CreateSerieDto,
+  CreateSerieFromTMDBDto,
+  TMDBSerie,
+} from '@/types/models';
+import api from './api';
 
-const ENDPOINT = "/serie";
+const ENDPOINT = '/serie';
 
 type UpdateSerieDto = Partial<CreateSerieDto>;
 
 export class SerieService {
-
   /**
    * Récupère toutes les séries locales
    */
   static async getSeries(): Promise<Serie[]> {
-    const { data } = await api.get<Serie[]>(ENDPOINT);
-    return data;
+    const { data } = await api.get(`${ENDPOINT}`);
+    // L'API retourne un objet avec une propriété 'items'
+    return Array.isArray(data.items) ? data.items : [];
   }
 
   /**
    * Récupère les séries en wishlist
    */
   static async getWishlistSeries(): Promise<Serie[]> {
-    const { data } = await api.get<Serie[]>(`${ENDPOINT}/wishlist`);
-    return data;
+    const { data } = await api.get(`${ENDPOINT}/wishlist`);
+    // L'API retourne un objet avec une propriété 'items'
+    return Array.isArray(data.items) ? data.items : [];
   }
 
   /**
@@ -50,9 +56,12 @@ export class SerieService {
   /**
    * Recherche dans les séries avec enrichissement TMDB
    */
-  static async searchSeries(query: string, limit: number = 20): Promise<{ results: TMDBSerie[] }> {
+  static async searchSeries(
+    query: string,
+    limit: number = 20
+  ): Promise<{ results: TMDBSerie[] }> {
     const { data } = await api.get(`${ENDPOINT}/search`, {
-      params: { q: query, limit }
+      params: { q: query, limit },
     });
     return data;
   }

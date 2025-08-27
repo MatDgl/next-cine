@@ -1,26 +1,32 @@
-import { Movie, CreateMovieDto, CreateMovieFromTMDBDto, TMDBMovie } from "@/types/models";
-import api from "./api";
+import {
+  Movie,
+  CreateMovieDto,
+  CreateMovieFromTMDBDto,
+  TMDBMovie,
+} from '@/types/models';
+import api from './api';
 
-const ENDPOINT = "/movie";
+const ENDPOINT = '/movie';
 
 type UpdateMovieDto = Partial<CreateMovieDto>;
 
 export class MovieService {
-
   /**
    * Récupère tous les films locaux
    */
   static async getMovies(): Promise<Movie[]> {
-    const { data } = await api.get<Movie[]>(ENDPOINT);
-    return data;
+    const { data } = await api.get(`${ENDPOINT}`);
+    // L'API retourne un objet avec une propriété 'items'
+    return Array.isArray(data.items) ? data.items : [];
   }
 
   /**
    * Récupère les films en wishlist
    */
   static async getWishlistMovies(): Promise<Movie[]> {
-    const { data } = await api.get<Movie[]>(`${ENDPOINT}/wishlist`);
-    return data;
+    const { data } = await api.get(`${ENDPOINT}/wishlist`);
+    // L'API retourne un objet avec une propriété 'items'
+    return Array.isArray(data.items) ? data.items : [];
   }
 
   /**
@@ -50,9 +56,12 @@ export class MovieService {
   /**
    * Recherche dans les films avec enrichissement TMDB
    */
-  static async searchMovies(query: string, limit: number = 20): Promise<{ results: TMDBMovie[] }> {
+  static async searchMovies(
+    query: string,
+    limit: number = 20
+  ): Promise<{ results: TMDBMovie[] }> {
     const { data } = await api.get(`${ENDPOINT}/search`, {
-      params: { q: query, limit }
+      params: { q: query, limit },
     });
     return data;
   }

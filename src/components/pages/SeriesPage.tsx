@@ -1,11 +1,11 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { Box, Button, Typography, CircularProgress } from "@mui/material";
-import { Serie } from "@/types/models";
-import { useFilters } from "@/contexts/FiltersContext";
-import Card from "@/components/shared/Card";
-import Filters from "@/components/shared/Filters";
-import { SerieService } from "@/services/serieService";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { Box, Button, Typography, CircularProgress } from '@mui/material';
+import { Serie } from '@/types/models';
+import { useFilters } from '@/contexts/FiltersContext';
+import Card from '@/components/shared/Card';
+import Filters from '@/components/shared/Filters';
+import { SerieService } from '@/services/serieService';
 
 export default function SeriesPage() {
   const [allSeries, setAllSeries] = useState<Serie[]>([]);
@@ -23,16 +23,16 @@ export default function SeriesPage() {
       const series = await SerieService.getSeries();
       setAllSeries(series);
     } catch (err) {
-      setError("Erreur lors du chargement des séries");
-      console.error("Error loading series:", err);
+      setError('Erreur lors du chargement des séries');
+      console.error('Error loading series:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleRatingUpdate = (serieId: number, newRating: number) => {
-    setAllSeries((prevSeries) =>
-      prevSeries.map((serie) =>
+    setAllSeries(prevSeries =>
+      prevSeries.map(serie =>
         serie.id === serieId ? { ...serie, rating: newRating } : serie
       )
     );
@@ -48,7 +48,7 @@ export default function SeriesPage() {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
         <CircularProgress />
       </Box>
     );
@@ -56,7 +56,7 @@ export default function SeriesPage() {
 
   if (error) {
     return (
-      <Box sx={{ textAlign: "center", py: 4 }}>
+      <Box sx={{ textAlign: 'center', py: 4 }}>
         <Typography color="error">{error}</Typography>
         <Button onClick={loadSeries} sx={{ mt: 2 }}>
           Réessayer
@@ -72,20 +72,24 @@ export default function SeriesPage() {
         <>
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
               gap: 3,
               mb: 3,
             }}
           >
-      {visibleSeries.map((serie) => (
+            {visibleSeries.map(serie => (
               <Box key={serie.id}>
-        <Card data={serie} onRatingUpdate={handleRatingUpdate} kind="serie" />
+                <Card
+                  data={serie}
+                  onRatingUpdate={handleRatingUpdate}
+                  kind="serie"
+                />
               </Box>
             ))}
           </Box>
           {canShowMore && (
-            <Box sx={{ textAlign: "center" }}>
+            <Box sx={{ textAlign: 'center' }}>
               <Button variant="outlined" onClick={showMore} size="large">
                 Voir plus
               </Button>
@@ -93,7 +97,7 @@ export default function SeriesPage() {
           )}
         </>
       ) : (
-        <Box sx={{ textAlign: "center", py: 4 }}>
+        <Box sx={{ textAlign: 'center', py: 4 }}>
           <Typography variant="h6" color="text.secondary">
             Aucune série trouvée.
           </Typography>

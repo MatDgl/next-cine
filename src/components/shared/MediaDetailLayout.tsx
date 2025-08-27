@@ -1,16 +1,18 @@
 import React from 'react';
-import { 
-  Box, 
-  Container, 
-  Typography, 
-  Chip, 
-  Alert, 
-  CircularProgress, 
-  Paper 
+import {
+  Box,
+  Container,
+  Typography,
+  Chip,
+  Alert,
+  CircularProgress,
+  Paper,
+  IconButton,
 } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import { TMDBMovie, TMDBSerie } from '@/types/models';
 import MediaPoster from '@/components/shared/MediaPoster';
-import StarRatingDisplay from '@/components/shared/StarRatingDisplay';
+import StarRating from '@/components/shared/StarRating';
 import MediaDetailsActions from '@/components/shared/MediaDetailsActions';
 import TMDBRating from '@/components/shared/TMDBRating';
 import MediaDetailsInfo from '@/components/shared/MediaDetailsInfo';
@@ -25,6 +27,7 @@ interface MediaDetailLayoutProps {
   userReview: string;
   mediaType: 'film' | 'série';
   onAddOrUpdateRating: (rating: number) => Promise<void>;
+  onClearRating: () => Promise<void>;
   onToggleWishlist: () => Promise<void>;
   onToggleWatched: (event: React.MouseEvent) => Promise<void>;
   onSaveReview: (review: string) => Promise<void>;
@@ -39,9 +42,10 @@ const MediaDetailLayout: React.FC<MediaDetailLayoutProps> = ({
   userReview,
   mediaType,
   onAddOrUpdateRating,
+  onClearRating,
   onToggleWishlist,
   onToggleWatched,
-  onSaveReview
+  onSaveReview,
 }) => {
   if (loading) {
     return (
@@ -62,7 +66,9 @@ const MediaDetailLayout: React.FC<MediaDetailLayoutProps> = ({
   if (!media) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Alert severity="warning">{mediaType === 'film' ? 'Film non trouvé' : 'Série non trouvée'}</Alert>
+        <Alert severity="warning">
+          {mediaType === 'film' ? 'Film non trouvé' : 'Série non trouvée'}
+        </Alert>
       </Container>
     );
   }
@@ -74,45 +80,56 @@ const MediaDetailLayout: React.FC<MediaDetailLayoutProps> = ({
           {error}
         </Alert>
       )}
-      
-      <Box sx={{ 
-        display: 'flex', 
-        gap: 4, 
-        flexDirection: { xs: 'column', md: 'row' },
-        minHeight: '80vh'
-      }}>
-        
-        {/* COLONNE GAUCHE - Affiche et actions */}
-        <Box sx={{ 
-          width: { xs: '100%', md: '350px' }, 
-          flexShrink: 0,
+
+      <Box
+        sx={{
           display: 'flex',
-          flexDirection: 'column',
-          gap: 3
-        }}>
-          
+          gap: 4,
+          flexDirection: { xs: 'column', md: 'row' },
+          minHeight: '80vh',
+        }}
+      >
+        {/* COLONNE GAUCHE - Affiche et actions */}
+        <Box
+          sx={{
+            width: { xs: '100%', md: '350px' },
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3,
+          }}
+        >
           {/* Affiche */}
-          <MediaPoster 
+          <MediaPoster
             posterPath={media.poster_path}
             title={media.title}
             mediaType={mediaType}
           />
 
           {/* Notation utilisateur */}
-          <Paper elevation={2} sx={{ p: 3, textAlign: 'center' }}>
-            <Typography variant="h6" gutterBottom>
+          <Paper elevation={2} sx={{ p: 3 }}>
+            <Typography variant="h6" align="center" sx={{ mb: 1 }}>
               Votre note
             </Typography>
-            <StarRatingDisplay
-              rating={media.local?.rating || userRating}
-              onRate={onAddOrUpdateRating}
-              readonly={saving}
-            />
-            {media.local?.rating && (
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                {media.local.rating}/5
-              </Typography>
-            )}
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
+              <StarRating
+                rating={media.local?.rating || userRating}
+                onRate={onAddOrUpdateRating}
+                readonly={saving}
+                iconSize="1.6rem"
+              />
+              {(media.local?.rating || userRating > 0) && (
+                <IconButton
+                  aria-label="Supprimer la note"
+                  onClick={onClearRating}
+                  disabled={saving}
+                  size="small"
+                  sx={{ color: 'rgba(255,255,255,0.8)' }}
+                >
+                  <Close fontSize="small" />
+                </IconButton>
+              )}
+            </Box>
           </Paper>
 
           {/* Boutons d'action */}
@@ -129,48 +146,64 @@ const MediaDetailLayout: React.FC<MediaDetailLayoutProps> = ({
 
         {/* COLONNE DROITE - Informations détaillées */}
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
-          
           {/* Titre principal avec chip type */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-            <Typography 
-              variant="h3" 
-              component="h1" 
-              sx={{ 
-                fontWeight: 'bold',
-                color: 'white'
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              mb: 2,
+              flexWrap: 'wrap',
+            }}
+          >
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{
+                fontWeight: 800,
+                color: 'white',
+                letterSpacing: 0.2,
+                textShadow: '0 2px 12px rgba(0,0,0,0.25)',
               }}
             >
               {media.title}
             </Typography>
-            <Chip 
-              label={mediaType === 'film' ? 'Film' : 'Série'} 
+            <Chip
+              label={mediaType === 'film' ? 'Film' : 'Série'}
               size="small"
               sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'rgba(255, 255, 255, 0.12)',
                 color: 'white',
-                fontWeight: 'medium',
+                fontWeight: 700,
                 borderRadius: '16px',
-                backdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.24)'
               }}
             />
           </Box>
 
           {/* Chips de genres */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-            {media.genres?.map((genre) => (
-              <Chip 
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25, mb: 3 }}>
+            {media.genres?.map(genre => (
+              <Chip
                 key={genre.id}
-                label={genre.name} 
-                size="small"
+                label={genre.name}
+                size="medium"
                 sx={{
                   backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  color: 'rgba(255, 255, 255, 0.87)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  fontWeight: 'medium',
-                  fontSize: '0.75rem',
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  border: '1px solid rgba(255, 255, 255, 0.16)',
+                  fontWeight: 600,
+                  fontSize: '0.85rem',
+                  height: 32,
+                  px: 1.25,
+                  borderRadius: '18px',
+                  letterSpacing: 0.15,
+                  backdropFilter: 'blur(10px)',
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                  }
+                    backgroundColor: 'rgba(255, 255, 255, 0.14)',
+                    borderColor: 'rgba(255, 255, 255, 0.26)',
+                  },
                 }}
               />
             ))}
@@ -178,7 +211,7 @@ const MediaDetailLayout: React.FC<MediaDetailLayoutProps> = ({
 
           {/* Note TMDB */}
           {media.vote_average && (
-            <TMDBRating 
+            <TMDBRating
               voteAverage={media.vote_average}
               voteCount={media.vote_count}
             />
@@ -189,11 +222,23 @@ const MediaDetailLayout: React.FC<MediaDetailLayoutProps> = ({
 
           {/* Synopsis */}
           {media.overview && (
-            <Paper elevation={2} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
-                Synopsis
-              </Typography>
-              <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04))',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: 2,
+                boxShadow: '0 8px 20px rgba(0,0,0,0.18)',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+                <Box sx={{ width: 6, height: 22, borderRadius: 1, background: 'rgba(255,255,255,0.5)' }} />
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  Synopsis
+                </Typography>
+              </Box>
+              <Typography variant="body1" sx={{ lineHeight: 1.9, color: 'rgba(255,255,255,0.92)' }}>
                 {media.overview}
               </Typography>
             </Paper>

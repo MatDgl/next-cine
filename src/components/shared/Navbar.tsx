@@ -1,11 +1,6 @@
 'use client';
 import React from 'react';
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box
-} from '@mui/material';
+import { AppBar, Toolbar, Typography, Box } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SearchBar from './SearchBar';
@@ -29,18 +24,18 @@ export default function Navbar() {
       <Toolbar>
         <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
           <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <Typography 
-              variant="h6" 
+            <Typography
+              variant="h6"
               component="span"
-              sx={{ 
+              sx={{
                 cursor: 'pointer',
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}
             >
               NextCine
             </Typography>
           </Link>
-          
+
           <Box sx={{ width: 12 }} />
           <SearchBar onSelect={handleSearchSelect} />
           <Box sx={{ flexGrow: 1 }} />

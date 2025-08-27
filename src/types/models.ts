@@ -10,6 +10,9 @@ export interface Movie {
   watched: boolean;
   createdAt: string;
   updatedAt: string;
+  tmdb?: {
+    poster_path?: string;
+  };
 }
 
 export interface Serie {
@@ -23,6 +26,9 @@ export interface Serie {
   watched: boolean;
   createdAt: string;
   updatedAt: string;
+  tmdb?: {
+    poster_path?: string;
+  };
 }
 
 // Interfaces pour les données TMDB détaillées

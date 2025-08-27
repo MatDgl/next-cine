@@ -6,19 +6,13 @@ import {
   Select,
   MenuItem,
   Box,
-  SelectChangeEvent
+  SelectChangeEvent,
 } from '@mui/material';
 import { SortOption } from '@/types/models';
 import { useFilters } from '@/contexts/FiltersContext';
 
 export default function Filters() {
-  
-  const {
-    sortValue,
-    setSortValue,
-    rateValue,
-    setRateValue,
-  } = useFilters();
+  const { sortValue, setSortValue, rateValue, setRateValue } = useFilters();
 
   const sortBy = [
     { label: 'Dernières modifications', value: SortOption.LASTMODIFIED, id: 0 },
@@ -46,23 +40,19 @@ export default function Filters() {
 
   return (
     <Box
-      sx={{ 
-        display: 'flex', 
-        gap: 2, 
+      sx={{
+        display: 'flex',
+        gap: 2,
         mb: 3,
         flexWrap: 'wrap',
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       {/* Sort selection */}
       <FormControl size="small" sx={{ minWidth: 200 }}>
         <InputLabel>Trier par</InputLabel>
-        <Select
-          value={sortValue}
-          label="Trier par"
-          onChange={handleSortChange}
-        >
-          {sortBy.map((sort) => (
+        <Select value={sortValue} label="Trier par" onChange={handleSortChange}>
+          {sortBy.map(sort => (
             <MenuItem key={sort.id} value={sort.value}>
               {sort.label}
             </MenuItem>
@@ -78,7 +68,7 @@ export default function Filters() {
           label="Filtrer par note"
           onChange={handleRateChange}
         >
-          {rates.map((rate) => (
+          {rates.map(rate => (
             <MenuItem key={rate.id} value={rate.value}>
               {rate.label}
             </MenuItem>

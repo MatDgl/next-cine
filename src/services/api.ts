@@ -10,14 +10,16 @@ const api = axios.create({
 
 // Interceptor pour gérer les erreurs globalement
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  response => response,
+  error => {
     console.error('API Error:', error);
-    
+
     if (error.code === 'ERR_NETWORK') {
-      console.error('Network error - vérifiez que votre API backend est démarrée sur le port 3000');
+      console.error(
+        'Network error - vérifiez que votre API backend est démarrée sur le port 3000'
+      );
     }
-    
+
     return Promise.reject(error);
   }
 );

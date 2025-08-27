@@ -16,9 +16,10 @@ export default function SerieDetailPage() {
     userRating,
     userReview,
     handleAddOrUpdateRating,
+  handleClearRating,
     handleToggleWishlist,
     handleToggleWatched,
-    handleSaveReview
+    handleSaveReview,
   } = useMediaDetails(tmdbId, 'serie');
 
   return (
@@ -31,6 +32,7 @@ export default function SerieDetailPage() {
       userReview={userReview}
       mediaType="série"
       onAddOrUpdateRating={handleAddOrUpdateRating}
+  onClearRating={handleClearRating}
       onToggleWishlist={handleToggleWishlist}
       onToggleWatched={handleToggleWatched}
       onSaveReview={handleSaveReview}

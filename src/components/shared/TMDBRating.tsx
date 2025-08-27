@@ -8,32 +8,36 @@ interface TMDBRatingProps {
 
 const TMDBRating: React.FC<TMDBRatingProps> = ({ voteAverage, voteCount }) => {
   return (
-    <Paper 
-      elevation={0} 
-      sx={{ 
-        p: 2.5, 
-        mb: 3, 
-        background: 'rgba(255, 255, 255, 0.05)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '12px',
-        maxWidth: 'fit-content'
+    <Paper
+      elevation={0}
+      sx={{
+        p: 3,
+        mb: 3,
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04))',
+        backdropFilter: 'blur(16px)',
+        border: '1px solid rgba(255, 255, 255, 0.12)',
+        borderRadius: '14px',
+        maxWidth: { xs: '100%', sm: 560 },
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
-        <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h4" fontWeight="bold" sx={{ color: '#FFD700', mb: 0.5 }}>
-            ⭐ {voteAverage.toFixed(1)}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1 }}>
+          <Typography
+            variant="h3"
+            fontWeight={800}
+            sx={{ color: '#FFD54F', lineHeight: 1 }}
+          >
+            {voteAverage.toFixed(1)}
           </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          <Typography variant="h6" sx={{ color: 'rgba(255,255,255,0.8)', fontWeight: 700 }}>
             /10
           </Typography>
         </Box>
-        <Box>
-          <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)', fontWeight: 'medium' }}>
+        <Box sx={{ textAlign: 'right' }}>
+          <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.95)', fontWeight: 800, letterSpacing: 0.4, textTransform: 'uppercase' }}>
             Note TMDB
           </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)' }}>
             {voteCount?.toLocaleString('fr-FR') || 'N/A'} votes
           </Typography>
         </Box>

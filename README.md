@@ -14,6 +14,7 @@ NextCine permet de gérer une collection de films et séries avec des fonctionna
 ## Fonctionnalités
 
 ### ✅ Implémentées
+
 - Interface avec Material UI
 - Navigation avec Navbar responsive
 - Pages Films et Séries avec onglets
@@ -24,6 +25,7 @@ NextCine permet de gérer une collection de films et séries avec des fonctionna
 - Données de test pour démonstration
 
 ### 🔄 En développement
+
 - Connexion à l'API backend
 - Recherche de films/séries
 - Page de détail pour chaque film/série
@@ -49,11 +51,13 @@ src/
 ## Installation et démarrage
 
 1. Installer les dépendances :
+
 ```bash
 npm install
 ```
 
 2. Lancer le serveur de développement :
+
 ```bash
 npm run dev
 ```
@@ -66,6 +70,7 @@ L'application utilise actuellement des données mock.
 Pour connecter à une vraie API, modifier le service dans `src/services/movieService.ts` et décommenter les appels fetch.
 
 Structure attendue de l'API :
+
 - `GET /movie` - Liste des films
 - `GET /movie/:id` - Film par ID
 - `PUT /movie/:id` - Mise à jour d'un film

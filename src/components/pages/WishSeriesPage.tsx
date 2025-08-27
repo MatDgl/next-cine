@@ -1,7 +1,16 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, CircularProgress, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { Serie } from '@/types/models';
+import {
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
+import { Serie, SortOption } from '@/types/models';
 import { SerieService } from '@/services/serieService';
 import { useFilters } from '@/contexts/FiltersContext';
 import Card from '@/components/shared/Card';
@@ -10,14 +19,23 @@ export default function WishlistSeriesPage() {
   const [allSeries, setAllSeries] = useState<Serie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { sortValue, setSortValue, visibleCount, setVisibleCount, sortMovies } = useFilters();
+  const { sortValue, setSortValue, visibleCount, setVisibleCount, sortMovies } =
+    useFilters();
 
   useEffect(() => {
     loadWishlistSeries();
   }, []);
 
-  const handleToggleWishlist = async (id: number, isCurrentlyInWishlist: boolean) => {
-    await SerieService.toggleWishlist(id, isCurrentlyInWishlist, allSeries, setAllSeries);
+  const handleToggleWishlist = async (
+    id: number,
+    isCurrentlyInWishlist: boolean
+  ) => {
+    await SerieService.toggleWishlist(
+      id,
+      isCurrentlyInWishlist,
+      allSeries,
+      setAllSeries
+    );
   };
 
   const loadWishlistSeries = async () => {
@@ -69,8 +87,10 @@ export default function WishlistSeriesPage() {
           label="Trier par"
           onChange={e => setSortValue(e.target.value as typeof sortValue)}
         >
-          <MenuItem value="lastModified">Dernières modifications</MenuItem>
-          <MenuItem value="titleAsc">Ordre alphabétique</MenuItem>
+          <MenuItem value={SortOption.LASTMODIFIED}>
+            Dernières modifications
+          </MenuItem>
+          <MenuItem value={SortOption.TITLE}>Ordre alphabétique</MenuItem>
         </Select>
       </FormControl>
       {sortedSeries.length === 0 ? (
@@ -84,15 +104,17 @@ export default function WishlistSeriesPage() {
         </Box>
       ) : (
         <>
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', 
-            gap: 3,
-            mb: 4
-          }}>
-            {displayedSeries.map((serie) => (
-              <Card 
-                key={serie.id} 
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: 3,
+              mb: 4,
+            }}
+          >
+            {displayedSeries.map(serie => (
+              <Card
+                key={serie.id}
                 data={serie}
                 onRatingUpdate={() => {}}
                 isWishlistMode={true}
@@ -104,8 +126,8 @@ export default function WishlistSeriesPage() {
 
           {hasMore && (
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => setVisibleCount(visibleCount + 12)}
                 sx={{ borderRadius: 2 }}
               >

@@ -48,63 +48,63 @@ export default function MoviesPage() {
 
   if (loading) {
     return (
-        <Box sx={{ textAlign: 'center', py: 4 }}>
-          <CircularProgress />
-        </Box>
+      <Box sx={{ textAlign: 'center', py: 4 }}>
+        <CircularProgress />
+      </Box>
     );
   }
 
   if (error) {
     return (
-        <Box sx={{ textAlign: 'center', py: 4 }}>
-          <Typography variant="h6" color="error">
-            {error}
-          </Typography>
-          <Button onClick={loadMovies} sx={{ mt: 2 }}>
-            Réessayer
-          </Button>
-        </Box>
+      <Box sx={{ textAlign: 'center', py: 4 }}>
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+        <Button onClick={loadMovies} sx={{ mt: 2 }}>
+          Réessayer
+        </Button>
+      </Box>
     );
   }
 
   return (
-      <Box>
-        <Filters />
-        {visibleMovies.length > 0 ? (
-          <>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-                gap: 3,
-                mb: 3,
-              }}
-            >
-        {visibleMovies.map((movie) => (
-                <Box key={movie.id}>
-          <Card data={movie} onRatingUpdate={handleRatingUpdate} kind="movie" />
-                </Box>
-              ))}
-            </Box>
-            {canShowMore && (
-              <Box sx={{ textAlign: 'center' }}>
-                <Button 
-                  variant="outlined" 
-                  onClick={showMore}
-                  size="large"
-                >
-                  Voir plus
-                </Button>
+    <Box>
+      <Filters />
+      {visibleMovies.length > 0 ? (
+        <>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: 3,
+              mb: 3,
+            }}
+          >
+            {visibleMovies.map(movie => (
+              <Box key={movie.id}>
+                <Card
+                  data={movie}
+                  onRatingUpdate={handleRatingUpdate}
+                  kind="movie"
+                />
               </Box>
-            )}
-          </>
-        ) : (
-          <Box sx={{ textAlign: 'center', py: 4 }}>
-            <Typography variant="h6" color="text.secondary">
-              Aucun film trouvé.
-            </Typography>
+            ))}
           </Box>
-        )}
-      </Box>
+          {canShowMore && (
+            <Box sx={{ textAlign: 'center' }}>
+              <Button variant="outlined" onClick={showMore} size="large">
+                Voir plus
+              </Button>
+            </Box>
+          )}
+        </>
+      ) : (
+        <Box sx={{ textAlign: 'center', py: 4 }}>
+          <Typography variant="h6" color="text.secondary">
+            Aucun film trouvé.
+          </Typography>
+        </Box>
+      )}
+    </Box>
   );
 }

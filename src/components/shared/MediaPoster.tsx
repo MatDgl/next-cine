@@ -8,14 +8,15 @@ interface MediaPosterProps {
   mediaType: 'film' | 'série';
 }
 
-const MediaPoster: React.FC<MediaPosterProps> = ({ 
-  posterPath, 
-  title, 
-  mediaType 
+const MediaPoster: React.FC<MediaPosterProps> = ({
+  posterPath,
+  title,
+  mediaType,
 }) => {
-  const gradientColor = mediaType === 'film' 
-    ? 'rgba(25, 118, 210, 0.1)' 
-    : 'rgba(156, 39, 176, 0.1)';
+  const gradientColor =
+    mediaType === 'film'
+      ? 'rgba(25, 118, 210, 0.1)'
+      : 'rgba(156, 39, 176, 0.1)';
 
   return (
     <Paper
@@ -25,23 +26,24 @@ const MediaPoster: React.FC<MediaPosterProps> = ({
         overflow: 'hidden',
         background: `linear-gradient(135deg, 
           ${posterPath ? 'transparent' : gradientColor} 0%, 
-          ${posterPath ? 'transparent' : gradientColor.replace('0.1', '0.05')} 100%)`
+          ${posterPath ? 'transparent' : gradientColor.replace('0.1', '0.05')} 100%)`,
       }}
     >
       <Box
         component="img"
-        src={posterPath 
-          ? SearchService.getTMDBImageUrl(posterPath, 'w500')
-          : '/assets/img/movie/default.png'
+        src={
+          posterPath
+            ? SearchService.getTMDBImageUrl(posterPath, 'w500')
+            : '/assets/img/movie/default.png'
         }
         alt={title}
         sx={{
           width: '100%',
           aspectRatio: '2/3',
           objectFit: 'cover',
-          display: 'block'
+          display: 'block',
         }}
-        onError={(e) => {
+        onError={e => {
           (e.target as HTMLImageElement).src = '/assets/img/movie/default.png';
         }}
       />

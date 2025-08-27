@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
-import { TMDBMovie, TMDBSerie, CreateMovieFromTMDBDto, CreateSerieFromTMDBDto } from '@/types/models';
+import {
+  TMDBMovie,
+  TMDBSerie,
+  CreateMovieFromTMDBDto,
+  CreateSerieFromTMDBDto,
+} from '@/types/models';
 import { MovieService } from '@/services/movieService';
 import { SerieService } from '@/services/serieService';
 
@@ -16,12 +21,16 @@ interface UseMediaDetailsResult {
   userReview: string;
   setUserReview: (review: string) => void;
   handleAddOrUpdateRating: (rating: number) => Promise<void>;
+  handleClearRating: () => Promise<void>;
   handleToggleWishlist: () => Promise<void>;
   handleToggleWatched: (event: React.MouseEvent) => Promise<void>;
   handleSaveReview: (review: string) => Promise<void>;
 }
 
-export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaDetailsResult => {
+export const useMediaDetails = (
+  tmdbId: number,
+  mediaType: MediaType
+): UseMediaDetailsResult => {
   const [media, setMedia] = useState<MediaData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,13 +45,12 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
     const fetchMedia = async () => {
       try {
         setLoading(true);
-        const response = await (isMovie 
+        const response = await (isMovie
           ? MovieService.getMovieByTmdbId(tmdbId)
-          : SerieService.getSerieByTmdbId(tmdbId)
-        );
-        
+          : SerieService.getSerieByTmdbId(tmdbId));
+
         let mediaData: MediaData;
-        
+
         if ('tmdb' in response && typeof response === 'object') {
           const tmdbData = (response as any).tmdb;
           if (isMovie) {
@@ -75,8 +83,10 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
               spoken_languages: tmdbData.spoken_languages,
               belongs_to_collection: tmdbData.belongs_to_collection,
               credits: tmdbData.credits,
-              director: tmdbData.credits?.crew?.find((person: any) => person.job === 'Director')?.name,
-              local: (response as any).local
+              director: tmdbData.credits?.crew?.find(
+                (person: any) => person.job === 'Director'
+              )?.name,
+              local: (response as any).local,
             } as TMDBMovie;
           } else {
             mediaData = {
@@ -109,22 +119,27 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
               created_by: tmdbData.created_by,
               credits: tmdbData.credits,
               director: tmdbData.created_by?.[0]?.name,
-              local: (response as any).local
+              local: (response as any).local,
             } as TMDBSerie;
           }
         } else {
           mediaData = response as MediaData;
         }
-        
+
         setMedia(mediaData);
-        
+
         if (mediaData.local) {
           setUserRating(mediaData.local.rating || 0);
           setUserReview(mediaData.local.review || '');
         }
       } catch (error) {
-        console.error(`Erreur lors du chargement ${isMovie ? 'du film' : 'de la série'}:`, error);
-        setError(`Impossible de charger les détails ${isMovie ? 'du film' : 'de la série'}`);
+        console.error(
+          `Erreur lors du chargement ${isMovie ? 'du film' : 'de la série'}:`,
+          error
+        );
+        setError(
+          `Impossible de charger les détails ${isMovie ? 'du film' : 'de la série'}`
+        );
       } finally {
         setLoading(false);
       }
@@ -138,28 +153,35 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
 
     try {
       setSaving(true);
-      
+
       if (media.local) {
+        // Si le film est en wishlist, le retirer lors de l'ajout d'une note
+        const wasInWishlist = media.local.wishlist;
+        
         const updatedMedia = await service.update(media.local.id, {
           rating: rating,
           review: userReview || undefined,
+          wishlist: wasInWishlist ? false : media.local.wishlist, // Retirer de wishlist si note ajoutée
+          viewCount: Math.max(1, media.local.viewCount || 0), // Au moins 1 visionnage si note
+          watched: true, // Marquer comme vu si note ajoutée
         });
-        setMedia(prev => prev ? { ...prev, local: updatedMedia } : null);
+        setMedia(prev => (prev ? { ...prev, local: updatedMedia } : null));
       } else {
+        // Créer une nouvelle entrée locale avec POST
         const payload: CreateDTO = {
           tmdbId: media.tmdbId,
           rating: rating,
           review: userReview || undefined,
-          wishlist: false,
-          watched: false,
+          wishlist: false, // Pas en wishlist si on note
+          watched: true, // Marquer comme vu
+          viewCount: 1, // Premier visionnage
         } as CreateDTO;
-        const createdMedia = await (isMovie 
+        const createdMedia = await (isMovie
           ? MovieService.createFromTMDB(payload as CreateMovieFromTMDBDto)
-          : SerieService.createFromTMDB(payload as CreateSerieFromTMDBDto)
-        );
-        setMedia(prev => prev ? { ...prev, local: createdMedia } : null);
+          : SerieService.createFromTMDB(payload as CreateSerieFromTMDBDto));
+        setMedia(prev => (prev ? { ...prev, local: createdMedia } : null));
       }
-      
+
       setUserRating(rating);
     } catch (error) {
       console.error('Erreur lors de la mise à jour de la note:', error);
@@ -174,24 +196,25 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
 
     try {
       setSaving(true);
-      
+
       if (media.local) {
         const updatedMedia = await service.updateWishlist(
           media.local.id,
           !media.local.wishlist
         );
-        setMedia(prev => prev ? { ...prev, local: updatedMedia } : null);
+        setMedia(prev => (prev ? { ...prev, local: updatedMedia } : null));
       } else {
+        // Créer une nouvelle entrée locale avec POST
         const payload: CreateDTO = {
           tmdbId: media.tmdbId,
           wishlist: true,
           watched: false,
+          viewCount: 0,
         } as CreateDTO;
-        const createdMedia = await (isMovie 
+        const createdMedia = await (isMovie
           ? MovieService.createFromTMDB(payload as CreateMovieFromTMDBDto)
-          : SerieService.createFromTMDB(payload as CreateSerieFromTMDBDto)
-        );
-        setMedia(prev => prev ? { ...prev, local: createdMedia } : null);
+          : SerieService.createFromTMDB(payload as CreateSerieFromTMDBDto));
+        setMedia(prev => (prev ? { ...prev, local: createdMedia } : null));
       }
     } catch (error) {
       console.error('Erreur lors de la modification de la wishlist:', error);
@@ -205,39 +228,43 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
     if (!media) return;
 
     const isRightClick = event.button === 2;
-    
+
     try {
       setSaving(true);
-      
+
       if (media.local) {
         let newViewCount = media.local.viewCount || 0;
         let newWatched = media.local.watched;
-        
+
         if (isRightClick && newViewCount > 0) {
-          newViewCount--;
+          // Vérifier qu'on ne peut pas passer à 0 si il y a une note ou critique
+          const hasRatingOrReview = media.local.rating || media.local.review;
+          const minViewCount = hasRatingOrReview ? 1 : 0;
+          
+          newViewCount = Math.max(minViewCount, newViewCount - 1);
           newWatched = newViewCount > 0;
         } else if (!isRightClick) {
           newViewCount++;
           newWatched = true;
         }
-        
+
         const updatedMedia = await service.update(media.local.id, {
           watched: newWatched,
           viewCount: newViewCount,
         });
-        setMedia(prev => prev ? { ...prev, local: updatedMedia } : null);
+        setMedia(prev => (prev ? { ...prev, local: updatedMedia } : null));
       } else {
+        // Créer une nouvelle entrée locale avec POST
         const payload: CreateDTO = {
           tmdbId: media.tmdbId,
           wishlist: false,
           watched: true,
           viewCount: 1,
         } as CreateDTO;
-        const createdMedia = await (isMovie 
+        const createdMedia = await (isMovie
           ? MovieService.createFromTMDB(payload as CreateMovieFromTMDBDto)
-          : SerieService.createFromTMDB(payload as CreateSerieFromTMDBDto)
-        );
-        setMedia(prev => prev ? { ...prev, local: createdMedia } : null);
+          : SerieService.createFromTMDB(payload as CreateSerieFromTMDBDto));
+        setMedia(prev => (prev ? { ...prev, local: createdMedia } : null));
       }
     } catch (error) {
       console.error('Erreur lors de la modification du statut vu:', error);
@@ -248,18 +275,54 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
   };
 
   const handleSaveReview = async (review: string) => {
-    if (!media?.local) return;
+    if (!media) return;
 
     try {
       setSaving(true);
-      const updatedMedia = await service.update(media.local.id, {
-        review: review || undefined,
-      });
-      setMedia(prev => prev ? { ...prev, local: updatedMedia } : null);
+
+      if (media.local) {
+        // Ajouter un visionnage lors de l'ajout d'une critique si pas déjà fait
+        const updatedMedia = await service.update(media.local.id, {
+          review: review || undefined,
+          viewCount: Math.max(1, media.local.viewCount || 0), // Au moins 1 visionnage si critique
+          watched: true, // Marquer comme vu si critique ajoutée
+        });
+        setMedia(prev => (prev ? { ...prev, local: updatedMedia } : null));
+      } else {
+        // Créer une nouvelle entrée locale avec POST
+        const payload: CreateDTO = {
+          tmdbId: media.tmdbId,
+          review: review || undefined,
+          wishlist: false,
+          watched: true,
+          viewCount: 1,
+        } as CreateDTO;
+        const createdMedia = await (isMovie
+          ? MovieService.createFromTMDB(payload as CreateMovieFromTMDBDto)
+          : SerieService.createFromTMDB(payload as CreateSerieFromTMDBDto));
+        setMedia(prev => (prev ? { ...prev, local: createdMedia } : null));
+      }
+
       setUserReview(review);
     } catch (error) {
       console.error('Erreur lors de la sauvegarde de la critique:', error);
       setError('Impossible de sauvegarder la critique');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleClearRating = async () => {
+    if (!media?.local) return;
+
+    try {
+      setSaving(true);
+      const updated = await service.update(media.local.id, { rating: 0 });
+      setMedia(prev => (prev ? { ...prev, local: updated } : null));
+      setUserRating(0);
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la note:', error);
+      setError('Impossible de supprimer la note');
     } finally {
       setSaving(false);
     }
@@ -274,8 +337,9 @@ export const useMediaDetails = (tmdbId: number, mediaType: MediaType): UseMediaD
     userReview,
     setUserReview,
     handleAddOrUpdateRating,
+  handleClearRating,
     handleToggleWishlist,
     handleToggleWatched,
-    handleSaveReview
+    handleSaveReview,
   };
 };

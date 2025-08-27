@@ -8,7 +8,10 @@ export default function WishPage() {
   return (
     <MediaTabs
       title="Envie de voir"
-      tabContents={[<WishMoviesPage key="movies" />, <WishlistSeriesPage key="series" />]}
+      tabContents={[
+        <WishMoviesPage key="movies" />,
+        <WishlistSeriesPage key="series" />,
+      ]}
     />
   );
 }

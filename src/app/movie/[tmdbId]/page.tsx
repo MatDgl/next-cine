@@ -16,9 +16,10 @@ export default function MovieDetailPage() {
     userRating,
     userReview,
     handleAddOrUpdateRating,
+  handleClearRating,
     handleToggleWishlist,
     handleToggleWatched,
-    handleSaveReview
+    handleSaveReview,
   } = useMediaDetails(tmdbId, 'movie');
 
   return (
@@ -31,6 +32,7 @@ export default function MovieDetailPage() {
       userReview={userReview}
       mediaType="film"
       onAddOrUpdateRating={handleAddOrUpdateRating}
+  onClearRating={handleClearRating}
       onToggleWishlist={handleToggleWishlist}
       onToggleWatched={handleToggleWatched}
       onSaveReview={handleSaveReview}

@@ -1,30 +1,35 @@
-applyTo: "**"
+applyTo: "\*\*"
 
 # Instructions Copilot pour ce projet
 
 ## RÈGLES DE REFACTORISATION
+
 - Créer des imports/exports appropriés
 - Maintenir la même structure logique
 - ❌ NE JAMAIS modifier les textes affichés à l'utilisateur
 - ❌ NE JAMAIS changer le comportement fonctionnel
 
 ### **RÈGLES DE MODIFICATION DE FICHIERS** :
-- ❌ NE JAMAIS créer de fichiers temporaires (`page_new.tsx`, `page_backup.tsx`, etc.)
+
+- ❌ NE JAMAIS créer de fichiers temporaires (`page_new.tsx`, `page_backup.tsx`, README_REFACTORING.md, etc.)
 - ✅ Modifier directement les fichiers existants en place
 - ✅ Utiliser uniquement les outils d'édition disponibles (`replace_string_in_file`, `edit_notebook_file`)
 - ✅ Effectuer les modifications par petites étapes si nécessaire
 
 ### **OBJECTIFS AUTORISÉS** :
+
 - ✅ Réduire le nombre de lignes du fichier principal
 - ✅ Corriger les erreurs TypeScript/ESLint
 
 ### **VALIDATION** :
+
 - Le résultat final doit être visuellement et fonctionnellement identique
 - Seule l'organisation du code doit changer
 - Demander confirmation avant tout changement d'apparence
 - Tester que l'application compile sans erreurs
 
 ### **EN CAS DE DOUTE** :
+
 - Toujours demander avant de modifier l'interface
 - Proposer la refactorisation étape par étape
 
@@ -32,7 +37,9 @@ applyTo: "**"
 
 - ✅ Ne pas attendre d'appui sur "Continuer" pour les lignes de commande
 - ✅ Enchaîner les commandes nécessaires pour accomplir la tâche
+
 ### **Exceptions nécessitant confirmation** :
+
 - ⚠️ Suppression de fichiers importants
 - ⚠️ Modification de configuration système
 - ⚠️ Installation de nouvelles dépendances majeures
@@ -41,9 +48,17 @@ applyTo: "**"
 ## CONTEXTE DU PROJET
 
 ### **Description** :
+
 NextCine est une application web Next.js pour gérer une collection de films et séries. L'application utilise Material-UI pour l'interface utilisateur et TypeScript pour le typage.
 
+### **API externe** :
+
+- Back-end NestJS exposé sur http://localhost:3000 (par défaut)
+- Le client HTTP utilise la variable d’environnement `NEXT_PUBLIC_API_BASE` pour la base URL (fallback: `http://localhost:3000/api`)
+- Le serveur Next.js de dev tourne sur le port 3001 (script `dev`), ne pas confondre avec l’API Nest
+
 ### **Stack technique** :
+
 - **Framework** : Next.js 15.4.2 avec App Router
 - **Langage** : TypeScript 5
 - **UI Library** : Material-UI (MUI) v7.2.0
@@ -52,6 +67,7 @@ NextCine est une application web Next.js pour gérer une collection de films et 
 - **Build tool** : Turbopack (mode dev)
 
 ### **Architecture** :
+
 - `src/app/` : Pages et layouts (App Router)
 - `src/components/` : Composants réutilisables (shared) et pages
 - `src/contexts/` : Contextes React
@@ -62,6 +78,7 @@ NextCine est une application web Next.js pour gérer une collection de films et 
 ## CONVENTIONS DE CODE
 
 ### **Nommage** :
+
 - ✅ Fichiers : PascalCase pour les composants (`Card.tsx`, `MoviesPage.tsx`)
 - ✅ Fichiers services : camelCase (`movieService.ts`, `serieService.ts`)
 - ✅ Variables/fonctions : camelCase
@@ -69,6 +86,7 @@ NextCine est une application web Next.js pour gérer une collection de films et 
 - ✅ Enums : PascalCase avec valeurs en UPPERCASE (`SortOption.LASTMODIFIED`)
 
 ### **Structure des composants** :
+
 ```typescript
 // Import order: React, Next.js, MUI, internal
 import React from 'react';
@@ -93,6 +111,7 @@ export default Component;
 ```
 
 ### **Gestion des données** :
+
 - ✅ Types définis dans `src/types/models.ts`
 - ✅ Services séparés pour movies et series
 - ✅ Contextes pour état global (FiltersContext)
@@ -101,6 +120,7 @@ export default Component;
 ## RÈGLES SPÉCIFIQUES AU PROJET
 
 ### **Material-UI** :
+
 - ✅ Utiliser les composants MUI systématiquement
 - ✅ Utiliser les icônes MUI pour les icônes
 - ✅ Respecter le thème défini dans `src/theme/`
@@ -109,17 +129,20 @@ export default Component;
 - ❌ Éviter les styles CSS inline classiques
 
 ### **Images et assets** :
+
 - ✅ Images dans `public/assets/img/`
 - ✅ Images de films dans `public/assets/img/movie/`
 - ✅ Utiliser `next/image` pour l'optimisation
 - ✅ Chemins relatifs depuis `/assets/`
 
 ### **Navigation** :
+
 - ✅ App Router Next.js (pas de Pages Router)
 - ✅ Fichiers `page.tsx` dans `src/app/`
 - ✅ Navigation via `next/navigation` (useRouter, Link)
 
 ### **État et contextes** :
+
 - ✅ FiltersContext pour les filtres globaux
 - ✅ Props drilling minimal grâce aux contextes
 - ✅ État local pour composants isolés
@@ -127,6 +150,7 @@ export default Component;
 ## QUALITÉ ET MAINTENANCE
 
 ### **TypeScript** :
+
 - ✅ Mode strict activé
 - ✅ Typage explicite des props et fonctions
 - ✅ Éviter `any`, utiliser `unknown` si nécessaire
@@ -134,18 +158,21 @@ export default Component;
 - ✅ Enums pour les valeurs constantes
 
 ### **Performances** :
+
 - ✅ Lazy loading des composants si nécessaire
 - ✅ Memoization avec `React.memo` pour composants lourds
 - ✅ Optimisation des images avec `next/image`
 - ✅ Éviter les re-renders inutiles
 
 ### **Accessibilité** :
+
 - ✅ Attributs ARIA appropriés
 - ✅ Navigation clavier fonctionnelle
 - ✅ Contraste des couleurs respecté
 - ✅ Labels descriptifs pour les éléments interactifs
 
 ### **Tests et validation** :
+
 - ✅ Compiler sans erreurs TypeScript
 - ✅ Linter ESLint sans warnings
 - ✅ Aucun bug ou erreur SonarQube (qualité et sécurité)
@@ -155,26 +182,29 @@ export default Component;
 ## WORKFLOW DE DÉVELOPPEMENT
 
 ### **Avant chaque modification** :
+
 1. Comprendre le contexte existant
 2. Identifier les fichiers impactés
 3. Vérifier les types et interfaces
 4. Respecter les conventions établies
 
 ### **Après chaque modification** :
+
 1. Vérifier la compilation TypeScript
 2. Tester l'application en mode dev
 3. Valider l'interface utilisateur
 4. Documenter les changements importants
 
 ### **Résolution d'erreurs** :
+
 - ✅ Analyser les erreurs TypeScript en priorité
 - ✅ Vérifier les imports et exports
 - ✅ Valider les types des props
 - ✅ Tester les chemins d'assets
 
-
 ## 🔧 GESTION DES SERVEURS DE DÉVELOPPEMENT
 
 ### **Avant de lancer un nouveau serveur :**
- ✅ Utiliser le serveur existant si possible
- ✅ Ne relancer que si nécessaire (changements config, erreurs)
+
+✅ Utiliser le serveur existant si possible
+✅ Ne relancer que si nécessaire (changements config, erreurs)

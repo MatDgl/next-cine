@@ -9,12 +9,12 @@ interface ReviewSectionProps {
   onSaveReview: (review: string) => void;
 }
 
-const ReviewSection: React.FC<ReviewSectionProps> = ({ 
-  review = '', 
-  saving, 
+const ReviewSection: React.FC<ReviewSectionProps> = ({
+  review = '',
+  saving,
   mediaType,
   hasLocalEntry,
-  onSaveReview 
+  onSaveReview,
 }) => {
   const [userReview, setUserReview] = useState(review || '');
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -35,11 +35,22 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({
   };
 
   return (
-    <Paper elevation={2} sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Ma critique
-      </Typography>
-      
+    <Paper
+      elevation={0}
+      sx={{
+        p: 3,
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.10)',
+        borderRadius: 2,
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+        <Box sx={{ width: 6, height: 22, borderRadius: 1, background: 'rgba(255,255,255,0.5)' }} />
+        <Typography variant="h6" sx={{ fontWeight: 700 }}>
+          Ma critique
+        </Typography>
+      </Box>
+
       {review && !showReviewForm ? (
         <Box>
           <Typography variant="body1" paragraph sx={{ fontStyle: 'italic' }}>
@@ -54,14 +65,19 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({
           <TextField
             fullWidth
             multiline
-            rows={4}
+            rows={5}
             placeholder={`Partagez votre avis sur ${mediaType === 'film' ? 'ce film' : 'cette série'}...`}
             value={userReview}
-            onChange={(e) => setUserReview(e.target.value)}
+            onChange={e => setUserReview(e.target.value)}
             variant="outlined"
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                background: 'rgba(255,255,255,0.03)',
+              },
+            }}
           />
-          <Box sx={{ display: 'flex', gap: 1 }}>
+          <Box sx={{ display: 'flex', gap: 1.5 }}>
             <Button
               variant="contained"
               onClick={handleSave}
@@ -70,14 +86,21 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({
               {saving ? 'Sauvegarde...' : 'Sauvegarder'}
             </Button>
             {showReviewForm && (
-              <Button onClick={handleCancel}>
+              <Button variant="text" onClick={handleCancel} color="inherit">
                 Annuler
               </Button>
             )}
           </Box>
           {!hasLocalEntry && (
-            <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-              Ajoutez d&apos;abord {mediaType === 'film' ? 'le film' : 'la série'} à votre collection pour pouvoir écrire une critique
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              sx={{ mt: 1 }}
+            >
+              Ajoutez d&apos;abord{' '}
+              {mediaType === 'film' ? 'le film' : 'la série'} à votre collection
+              pour pouvoir écrire une critique
             </Typography>
           )}
         </Box>

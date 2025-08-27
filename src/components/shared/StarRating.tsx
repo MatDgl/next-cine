@@ -1,10 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { 
-  Star, 
-  StarHalf, 
-  StarBorder 
-} from '@mui/icons-material';
+import { Star, StarHalf, StarBorder } from '@mui/icons-material';
 import { Box, Tooltip } from '@mui/material';
 import { Movie } from '@/types/models';
 import { MovieService } from '@/services/movieService';
@@ -12,22 +8,37 @@ import { SerieService } from '@/services/serieService';
 import { theme } from '@/theme/theme';
 
 interface StarRatingProps {
-  data: Movie;
+  data?: Movie;
   onRatingUpdate?: (newRating: number) => void;
   kind?: 'movie' | 'serie';
+  // Props alternatives pour mode display simple
+  rating?: number;
+  onRate?: (rating: number) => void;
+  readonly?: boolean;
+  iconSize?: string | number;
 }
 
-export default function StarRating({ data, onRatingUpdate, kind = 'movie' }: Readonly<StarRatingProps>) {
+export default function StarRating({
+  data,
+  onRatingUpdate,
+  kind = 'movie',
+  rating,
+  onRate,
+  readonly = false,
+  iconSize = '1.2rem',
+}: Readonly<StarRatingProps>) {
   const [hoveredRating, setHoveredRating] = useState<number | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  
+
   const starIndexes = [0, 1, 2, 3, 4];
 
-  const getDisplayRating = () => hoveredRating ?? data.rating ?? 0;
+  // Support pour les deux modes : avec data (mode complet) ou avec rating (mode display)
+  const getCurrentRating = () => data?.rating ?? rating ?? 0;
+  const getDisplayRating = () => hoveredRating ?? getCurrentRating();
 
   const getStarIcon = (index: number) => {
     const rating = getDisplayRating();
-    
+
     if (rating >= index + 1) {
       return <Star sx={{ color: theme.palette.secondary.main }} />;
     } else if (rating >= index + 0.5) {
@@ -37,7 +48,11 @@ export default function StarRating({ data, onRatingUpdate, kind = 'movie' }: Rea
     }
   };
 
-  const handleMouseMove = (event: React.MouseEvent<HTMLElement>, index: number) => {
+  const handleMouseMove = (
+    event: React.MouseEvent<HTMLElement>,
+    index: number
+  ) => {
+    if (readonly) return;
     const target = event.target as HTMLElement;
     const rect = target.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
@@ -47,15 +62,24 @@ export default function StarRating({ data, onRatingUpdate, kind = 'movie' }: Rea
   };
 
   const clearHover = () => {
-    setHoveredRating(null);
+    if (!readonly) setHoveredRating(null);
   };
 
   const handleClickRating = async () => {
-    if (isSaving || !hoveredRating) return;
+    if (isSaving || !hoveredRating || readonly) return;
+
+    // Mode display simple (sans data)
+    if (!data && onRate) {
+      onRate(hoveredRating);
+      return;
+    }
+
+    // Mode complet avec data
+    if (!data) return;
 
     const oldRating = data.rating;
     data.rating = hoveredRating;
-    
+
     setIsSaving(true);
 
     try {
@@ -76,7 +100,7 @@ export default function StarRating({ data, onRatingUpdate, kind = 'movie' }: Rea
   const getTooltipText = () => {
     const rating = getDisplayRating();
     const result = rating + ' - ';
-    
+
     switch (rating) {
       case 0.5:
         return result + 'Nul';
@@ -104,18 +128,18 @@ export default function StarRating({ data, onRatingUpdate, kind = 'movie' }: Rea
   };
 
   return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        cursor: 'pointer',
+    <Box
+      sx={{
+        display: 'flex',
+        cursor: readonly ? 'default' : 'pointer',
         '& .MuiSvgIcon-root': {
-          fontSize: '1.2rem'
-        }
+          fontSize: iconSize,
+        },
       }}
       onMouseLeave={clearHover}
     >
-      {starIndexes.map((index) => (
-        <Tooltip 
+      {starIndexes.map(index => (
+        <Tooltip
           key={index}
           title={getTooltipText()}
           placement="top"
@@ -123,12 +147,12 @@ export default function StarRating({ data, onRatingUpdate, kind = 'movie' }: Rea
         >
           <Box
             component="span"
-            onMouseMove={(e) => handleMouseMove(e, index)}
+            onMouseMove={e => handleMouseMove(e, index)}
             onClick={handleClickRating}
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
-              cursor: isSaving ? 'wait' : 'pointer'
+              cursor: readonly ? 'default' : isSaving ? 'wait' : 'pointer',
             }}
           >
             {getStarIcon(index)}

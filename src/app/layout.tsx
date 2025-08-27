@@ -1,12 +1,12 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import MuiProvider from "@/theme/MuiProvider";
-import { FiltersProvider } from "@/contexts/FiltersContext";
-import Navbar from "@/components/shared/Navbar";
+import type { Metadata } from 'next';
+import './globals.css';
+import MuiProvider from '@/theme/MuiProvider';
+import { FiltersProvider } from '@/contexts/FiltersContext';
+import Navbar from '@/components/shared/Navbar';
 
 export const metadata: Metadata = {
-  title: "NextCine",
-  description: "Gérez votre collection de films et séries avec NextCine",
+  title: 'NextCine',
+  description: 'Gérez votre collection de films et séries avec NextCine',
 };
 
 interface RootLayoutProps {

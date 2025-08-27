@@ -1,7 +1,16 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, CircularProgress, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { Movie } from '@/types/models';
+import {
+  Box,
+  Button,
+  Typography,
+  CircularProgress,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
+import { Movie, SortOption } from '@/types/models';
 import { MovieService } from '@/services/movieService';
 import { useFilters } from '@/contexts/FiltersContext';
 import Card from '@/components/shared/Card';
@@ -10,14 +19,23 @@ export default function WishMoviesPage() {
   const [allMovies, setAllMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { sortValue, setSortValue, visibleCount, setVisibleCount, sortMovies } = useFilters();
+  const { sortValue, setSortValue, visibleCount, setVisibleCount, sortMovies } =
+    useFilters();
 
   useEffect(() => {
     loadWishlistMovies();
   }, []);
 
-  const handleToggleWishlist = async (id: number, isCurrentlyInWishlist: boolean) => {
-    await MovieService.toggleWishlist(id, isCurrentlyInWishlist, allMovies, setAllMovies);
+  const handleToggleWishlist = async (
+    id: number,
+    isCurrentlyInWishlist: boolean
+  ) => {
+    await MovieService.toggleWishlist(
+      id,
+      isCurrentlyInWishlist,
+      allMovies,
+      setAllMovies
+    );
   };
 
   const loadWishlistMovies = async () => {
@@ -60,7 +78,7 @@ export default function WishMoviesPage() {
   return (
     <Box>
       {/* Sélecteur de tri uniquement (ordre/dernières modifs) */}
-      <FormControl size="small" sx={{ minWidth: 180, mb: 2}}>
+      <FormControl size="small" sx={{ minWidth: 180, mb: 2 }}>
         <InputLabel id="wishlist-sort-label">Trier par</InputLabel>
         <Select
           labelId="wishlist-sort-label"
@@ -69,8 +87,10 @@ export default function WishMoviesPage() {
           label="Trier par"
           onChange={e => setSortValue(e.target.value as typeof sortValue)}
         >
-          <MenuItem value="lastModified">Dernières modifications</MenuItem>
-          <MenuItem value="titleAsc">Ordre alphabétique</MenuItem>
+          <MenuItem value={SortOption.LASTMODIFIED}>
+            Dernières modifications
+          </MenuItem>
+          <MenuItem value={SortOption.TITLE}>Ordre alphabétique</MenuItem>
         </Select>
       </FormControl>
       {sortedMovies.length === 0 ? (
@@ -84,15 +104,17 @@ export default function WishMoviesPage() {
         </Box>
       ) : (
         <>
-          <Box sx={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', 
-            gap: 3,
-            mb: 4
-          }}>
-            {displayedMovies.map((movie) => (
-              <Card 
-                key={movie.id} 
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+              gap: 3,
+              mb: 4,
+            }}
+          >
+            {displayedMovies.map(movie => (
+              <Card
+                key={movie.id}
                 data={movie}
                 onRatingUpdate={() => {}}
                 isWishlistMode={true}
@@ -103,8 +125,8 @@ export default function WishMoviesPage() {
           </Box>
           {hasMore && (
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={() => setVisibleCount(visibleCount + 12)}
                 sx={{ borderRadius: 2 }}
               >

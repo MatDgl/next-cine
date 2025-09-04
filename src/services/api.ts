@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8080/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -16,7 +16,7 @@ api.interceptors.response.use(
 
     if (error.code === 'ERR_NETWORK') {
       console.error(
-        'Network error - vérifiez que votre API backend est démarrée sur le port 3000'
+        'Network error - vérifiez que votre API backend est démarrée sur le port 8080'
       );
     }
 

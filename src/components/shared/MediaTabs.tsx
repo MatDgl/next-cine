@@ -1,7 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import ProfileHeader from '@/components/shared/ProfileHeader';
-import { Movie as MovieIcon, LiveTv as LiveTvIcon } from '@mui/icons-material';
 
 interface MediaTabsProps {
   readonly title: string;

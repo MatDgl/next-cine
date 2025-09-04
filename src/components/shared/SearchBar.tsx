@@ -10,8 +10,6 @@ import {
   InputAdornment,
   List,
   ListItem,
-  ListItemAvatar,
-  ListItemText,
   Paper,
   Popper,
   TextField,
@@ -70,7 +68,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
     if (debounceId) clearTimeout(debounceId);
   };
 
-  const handleResultClick = (result: any) => {
+  const handleResultClick = (result: TMDBMovie | TMDBSerie) => {
     // Fermer la recherche immédiatement
     setResults(null);
     setAnchorEl(null);
@@ -78,12 +76,12 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
     onSelect?.(result);
   };
 
-  const getResultUrl = (result: any) => {
-    const type = (result as any).type === 'movie' ? 'movie' : 'serie';
+  const getResultUrl = (result: TMDBMovie | TMDBSerie) => {
+    const type = result.type === 'movie' ? 'movie' : 'serie';
     return `/${type}/${result.tmdbId}`;
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = React.useCallback((event: MouseEvent) => {
     if (anchorEl && !anchorEl.contains(event.target as Node)) {
       const popperElement = document.querySelector('[data-popper-placement]');
       if (popperElement && !popperElement.contains(event.target as Node)) {
@@ -91,7 +89,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
         setAnchorEl(null);
       }
     }
-  };
+  }, [anchorEl]);
 
   useEffect(() => {
     return () => {
@@ -116,7 +114,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }
-  }, [open, anchorEl]);
+  }, [open, handleClickOutside]);
 
   // Vider la recherche lors du changement de page
   useEffect(() => {
@@ -124,7 +122,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
     setResults(null);
     setAnchorEl(null);
     if (debounceId) clearTimeout(debounceId);
-  }, [pathname]);
+  }, [pathname, debounceId]);
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -222,7 +220,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
           <List>
             {results?.results.map(result => (
               <ListItem
-                key={`${(result as any).type}-${result.tmdbId}`}
+                key={`${result.type}-${result.tmdbId}`}
                 disablePadding
               >
                 <Link
@@ -250,8 +248,8 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
                   >
                     <Box sx={{ mr: 2, flexShrink: 0 }}>
                       <Avatar
-                        src={getImageUrl((result as any).poster_path)}
-                        alt={(result as any).title}
+                        src={getImageUrl(result.poster_path)}
+                        alt={result.title}
                         variant="rounded"
                         sx={{ width: 40, height: 60 }}
                       />
@@ -266,21 +264,21 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
                         }}
                       >
                         <Typography variant="subtitle2" component="span">
-                          {(result as any).title}
+                          {result.title}
                         </Typography>
                         <Chip
                           label={
-                            (result as any).type === 'movie' ? 'Film' : 'Série'
+                            result.type === 'movie' ? 'Film' : 'Série'
                           }
                           size="small"
                           color={
-                            (result as any).type === 'movie'
+                            result.type === 'movie'
                               ? 'primary'
                               : 'secondary'
                           }
                           sx={{ fontSize: '0.7rem', height: 20 }}
                         />
-                        {(result as any).local && (
+                        {result.local && (
                           <Chip
                             label="Local"
                             size="small"
@@ -296,15 +294,15 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
                           component="span"
                           display="block"
                         >
-                          {SearchService.isMovie(result as any)
-                            ? formatDate((result as any).release_date)
-                            : formatDate((result as any).first_air_date)}
-                          {(result as any).vote_average &&
-                            ` • ⭐ ${(result as any).vote_average.toFixed(1)}`}
-                          {(result as any).local?.rating &&
-                            ` • 🎯 ${(result as any).local.rating}/5`}
+                          {SearchService.isMovie(result)
+                            ? formatDate((result as TMDBMovie).release_date)
+                            : formatDate((result as TMDBSerie).first_air_date)}
+                          {result.vote_average &&
+                            ` • ⭐ ${result.vote_average.toFixed(1)}`}
+                          {result.local?.rating &&
+                            ` • 🎯 ${result.local.rating}/5`}
                         </Typography>
-                        {(result as any).overview && (
+                        {result.overview && (
                           <Typography
                             variant="caption"
                             color="text.secondary"
@@ -317,7 +315,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
                               mt: 0.5,
                             }}
                           >
-                            {(result as any).overview}
+                            {result.overview}
                           </Typography>
                         )}
                       </React.Fragment>

@@ -39,7 +39,6 @@ const MediaDetailLayout: React.FC<MediaDetailLayoutProps> = ({
   error,
   saving,
   userRating,
-  userReview,
   mediaType,
   onAddOrUpdateRating,
   onClearRating,

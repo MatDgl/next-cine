@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Card as MuiCard,
   CardMedia,
-  CardContent,
   Typography,
   Box,
 } from '@mui/material';

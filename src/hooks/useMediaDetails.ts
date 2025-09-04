@@ -12,6 +12,14 @@ type MediaType = 'movie' | 'serie';
 type MediaData = TMDBMovie | TMDBSerie;
 type CreateDTO = CreateMovieFromTMDBDto | CreateSerieFromTMDBDto;
 
+// Types pour les réponses de l'API
+interface ApiResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tmdb: any; // Les données TMDB sont complexes et varient selon le type de média
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  local: any; // Les données locales varient également
+}
+
 interface UseMediaDetailsResult {
   media: MediaData | null;
   loading: boolean;
@@ -52,7 +60,7 @@ export const useMediaDetails = (
         let mediaData: MediaData;
 
         if ('tmdb' in response && typeof response === 'object') {
-          const tmdbData = (response as any).tmdb;
+          const tmdbData = (response as ApiResponse).tmdb;
           if (isMovie) {
             mediaData = {
               type: 'movie',
@@ -84,9 +92,9 @@ export const useMediaDetails = (
               belongs_to_collection: tmdbData.belongs_to_collection,
               credits: tmdbData.credits,
               director: tmdbData.credits?.crew?.find(
-                (person: any) => person.job === 'Director'
+                (person: { job: string; name: string }) => person.job === 'Director'
               )?.name,
-              local: (response as any).local,
+              local: (response as ApiResponse).local,
             } as TMDBMovie;
           } else {
             mediaData = {
@@ -119,7 +127,7 @@ export const useMediaDetails = (
               created_by: tmdbData.created_by,
               credits: tmdbData.credits,
               director: tmdbData.created_by?.[0]?.name,
-              local: (response as any).local,
+              local: (response as ApiResponse).local,
             } as TMDBSerie;
           }
         } else {

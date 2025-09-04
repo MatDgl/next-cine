@@ -4,7 +4,6 @@ import { TMDBMovie, TMDBSerie } from '@/types/models';
 import {
   formatDate,
   formatDuration,
-  formatSeriesDuration,
   formatCurrency,
 } from '@/utils/formatters';
 import { getFeaturedActors } from '@/utils/media';
@@ -64,7 +63,7 @@ const MediaDetailsInfo: React.FC<MediaDetailsInfoProps> = ({ media }) => {
           </Typography>
           <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.92)' }}>
             <strong>
-              {getFeaturedActors(movie.credits.cast as any)
+              {getFeaturedActors(movie.credits.cast)
                 .map(actor => actor.name)
                 .join(', ')}
             </strong>
@@ -216,7 +215,7 @@ const MediaDetailsInfo: React.FC<MediaDetailsInfoProps> = ({ media }) => {
           </Typography>
           <Typography variant="body1" sx={{ color: 'rgba(255,255,255,0.92)' }}>
             <strong>
-              {getFeaturedActors(serie.credits.cast as any)
+              {getFeaturedActors(serie.credits.cast)
                 .map(actor => actor.name)
                 .join(', ')}
             </strong>

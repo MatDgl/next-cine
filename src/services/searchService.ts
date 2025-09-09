@@ -9,10 +9,28 @@ export class SearchService {
     query: string,
     limit: number = 20
   ): Promise<SearchResponse> {
-    const { data } = await api.get<SearchResponse>('/search', {
+    const { data } = await api.get<any>('/search', {
       params: { q: query, limit },
     });
-    return data;
+    
+    console.log('API raw data:', data.results?.[0]); // Log des données brutes
+    
+    // Transformer les données de l'API pour correspondre aux types frontend
+    const transformedResults = data.results?.map((item: any) => ({
+      ...item,
+      tmdbId: item.id, // Mapper 'id' vers 'tmdbId'
+      type: item.media_type === 'tv' ? 'serie' : 'movie', // Mapper 'media_type' vers 'type'
+      title: item.title || item.name, // Utiliser 'title' ou 'name' selon le type
+    })) || [];
+
+    console.log('Transformed data:', transformedResults[0]); // Log des données transformées
+
+    return {
+      query: data.query,
+      limit: data.limit,
+      total: data.total,
+      results: transformedResults,
+    };
   }
 
   /**
@@ -22,10 +40,24 @@ export class SearchService {
     query: string,
     limit: number = 20
   ): Promise<SearchResponse> {
-    const { data } = await api.get<SearchResponse>('/movie/search', {
+    const { data } = await api.get<any>('/movie/search', {
       params: { q: query, limit },
     });
-    return data;
+    
+    // Transformer les données de l'API pour correspondre aux types frontend
+    const transformedResults = data.results?.map((item: any) => ({
+      ...item,
+      tmdbId: item.id, // Mapper 'id' vers 'tmdbId'
+      type: 'movie', // Type fixe pour les films
+      title: item.title || item.name, // Utiliser 'title' ou 'name'
+    })) || [];
+
+    return {
+      query: data.query,
+      limit: data.limit,
+      total: data.total,
+      results: transformedResults,
+    };
   }
 
   /**
@@ -35,10 +67,24 @@ export class SearchService {
     query: string,
     limit: number = 20
   ): Promise<SearchResponse> {
-    const { data } = await api.get<SearchResponse>('/serie/search', {
+    const { data } = await api.get<any>('/serie/search', {
       params: { q: query, limit },
     });
-    return data;
+    
+    // Transformer les données de l'API pour correspondre aux types frontend
+    const transformedResults = data.results?.map((item: any) => ({
+      ...item,
+      tmdbId: item.id, // Mapper 'id' vers 'tmdbId'
+      type: 'serie', // Type fixe pour les séries
+      title: item.title || item.name, // Utiliser 'title' ou 'name'
+    })) || [];
+
+    return {
+      query: data.query,
+      limit: data.limit,
+      total: data.total,
+      results: transformedResults,
+    };
   }
 
   /**

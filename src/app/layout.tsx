@@ -3,6 +3,7 @@ import './globals.css';
 import MuiProvider from '@/theme/MuiProvider';
 import { FiltersProvider } from '@/contexts/FiltersContext';
 import Navbar from '@/components/shared/Navbar';
+import DevErrorSuppressor from '@/components/DevErrorSuppressor';
 
 export const metadata: Metadata = {
   title: 'NextCine',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="fr">
       <body className="antialiased">
+        <DevErrorSuppressor />
         <MuiProvider>
           <FiltersProvider>
             <Navbar />

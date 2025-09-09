@@ -78,6 +78,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
 
   const getResultUrl = (result: TMDBMovie | TMDBSerie) => {
     const type = result.type === 'movie' ? 'movie' : 'serie';
+    console.log('getResultUrl - result:', result, 'type:', type, 'tmdbId:', result.tmdbId);
     return `/${type}/${result.tmdbId}`;
   };
 
@@ -122,7 +123,7 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
     setResults(null);
     setAnchorEl(null);
     if (debounceId) clearTimeout(debounceId);
-  }, [pathname, debounceId]);
+  }, [pathname]); // Retiré debounceId de la dépendance
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -218,9 +219,9 @@ export default function SearchBar({ onSelect }: SearchBarProps) {
           })}
         >
           <List>
-            {results?.results.map(result => (
+            {results?.results.map((result, index) => (
               <ListItem
-                key={`${result.type}-${result.tmdbId}`}
+                key={`${result.type || 'unknown'}-${result.tmdbId || index}`}
                 disablePadding
               >
                 <Link

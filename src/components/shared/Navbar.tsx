@@ -11,10 +11,13 @@ export default function Navbar() {
   const router = useRouter();
 
   const handleSearchSelect = (result: TMDBMovie | TMDBSerie) => {
+    console.log('handleSearchSelect - result:', result);
     // Rediriger vers la page de détail en utilisant le tmdbId
     if (SearchService.isMovie(result)) {
+      console.log('Navigating to movie:', result.tmdbId);
       router.push(`/movie/${result.tmdbId}`);
     } else {
+      console.log('Navigating to serie:', result.tmdbId);
       router.push(`/serie/${result.tmdbId}`);
     }
   };

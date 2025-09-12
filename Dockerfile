@@ -1,13 +1,17 @@
+# ========================================
+# Dockerfile pour développement local
+# ========================================
+
 FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package*.json .
+COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Commande de développement avec hot-reload
+CMD ["npm", "run", "dev"]

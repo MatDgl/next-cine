@@ -5,8 +5,8 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Next.js build outputs
-.next
+# Next.js build outputs (conserver pour standalone)
+# .next
 out
 dist
 

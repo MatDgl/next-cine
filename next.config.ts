@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
     // Désactiver les warnings de source maps manquantes
     optimizePackageImports: ['@mui/material', '@mui/icons-material'],
   },
+  // Configuration pour servir avec nginx en mode standalone (Build pour Docker/K8s)
+  output: 'standalone',
 };
 
 export default nextConfig;

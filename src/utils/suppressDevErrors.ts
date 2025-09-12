@@ -17,7 +17,7 @@ export const suppressDevErrors = () => {
     'anonymous code',
   ];
 
-  console.error = (...args: any[]) => {
+  console.error = (...args: unknown[]) => {
     const message = args[0];
     if (typeof message === 'string') {
       const shouldIgnore = ignoredErrorPatterns.some(pattern => 
@@ -28,7 +28,7 @@ export const suppressDevErrors = () => {
     originalError.apply(console, args);
   };
 
-  console.warn = (...args: any[]) => {
+  console.warn = (...args: unknown[]) => {
     const message = args[0];
     if (typeof message === 'string') {
       const shouldIgnore = ignoredErrorPatterns.some(pattern => 
